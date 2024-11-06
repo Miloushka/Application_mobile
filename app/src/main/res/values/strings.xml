@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Suggestion</string>
+
+    <string name="select_date">Mois</string>
+
+    <!-- Page home -->
+    <string name="home_section_categorie_depense">depense</string>
+    <string name="home_section_prix_depense">prix</string>
+
+    <!-- Page month -->
+    <string name="month_page_categorie">depense</string>
+    <string name="month_page_prix_total_categorie">prix</string>
+    <string name="month_page_categorie_depense">depense</string>
+    <string name="month_page_prix_depense">prix</string>
+
+    <!-- Page annual -->
+    <string name="annual_page_date">annee</string>
+
+    <!-- Page setting -->
+    <string name="setting_page_title">Informations personnel</string>
+    <string name="setting_page_information_title">Informations</string>
+    <string name="setting_page_information_data">Informations</string>
+</resources>
