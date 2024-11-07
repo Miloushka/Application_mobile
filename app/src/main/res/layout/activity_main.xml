@@ -2,12 +2,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Icône d'accueil -->
+
+    <!-- Bouton pour ouvrir SpinnerActivity -->
+
     <TextView
         android:layout_width="130dp"
         android:layout_height="60dp"
-        android:text="@string/app_name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="3dp"
         android:layout_marginLeft="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
-        android:textSize="24sp"/>
+        android:layout_marginEnd="179dp"
+        android:layout_toEndOf="@+id/icon_main"
+        android:text="@string/app_name"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/icon_main"
+        android:layout_width="72dp"
+        android:layout_height="79dp"
+        android:src="@drawable/ic_add" />
+
+    <ImageButton
+        android:id="@+id/button_open_spinner"
+        android:layout_width="87dp"
+        android:layout_height="97dp"
+        android:layout_below="@id/icon_main"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="99dp"
+        android:layout_marginEnd="52dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="add_depense"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_add" />
 
 </RelativeLayout>

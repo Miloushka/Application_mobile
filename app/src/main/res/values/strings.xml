@@ -20,4 +20,12 @@
     <string name="setting_page_title">Informations personnel</string>
     <string name="setting_page_information_title">Informations</string>
     <string name="setting_page_information_data">Informations</string>
+
+    <string name="expense_icon">Icône de dépense</string>
+    <!-- Liste déroulante -->
+    <string-array name="list_title">
+        <item>Maison</item>
+        <item>Transport</item>
+        <item>Loisir</item>
+    </string-array>
 </resources>
