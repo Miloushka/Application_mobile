@@ -20,7 +20,7 @@
         android:title="Annual" />
 
     <item
-        android:id="@+id/bottom_setting"
+        android:id="@+id/bottom_account"
         android:icon="@drawable/ic_setting"
         android:title="Setting" />
 
