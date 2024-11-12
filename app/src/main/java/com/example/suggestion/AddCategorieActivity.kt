@@ -9,12 +9,15 @@ import android.widget.Toast
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.suggestion.SelectDateHelper.showDatePicker
 
 
 class AddCategorieActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var customSpinner: Spinner
-    private lateinit var inputField: EditText
+    private lateinit var expenseDetail: EditText
+    private lateinit var priceCost: EditText
+    private lateinit var monthDepenseEditText: EditText
     private lateinit var submitButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +26,9 @@ class AddCategorieActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
 
         customSpinner = findViewById(R.id.customSpinner)
         customSpinner.onItemSelectedListener = this
-        inputField = findViewById(R.id.inputField)
+        expenseDetail = findViewById(R.id.expenseDetail)
+        priceCost = findViewById(R.id.priceCost)
+        monthDepenseEditText = findViewById(R.id.monthDepense)
         submitButton = findViewById(R.id.buttonSubmit)
 
 
@@ -36,32 +41,37 @@ class AddCategorieActivity : AppCompatActivity(), AdapterView.OnItemSelectedList
         val adapter = CustomAdapter(this, customList)
         customSpinner.adapter = adapter
 
+        // Ouvrir le sélecteur de date lors du clic sur l'EditText
+        monthDepenseEditText.setOnClickListener {
+            showDatePicker(this, DatePickerMode.MONTH) { selectedDate ->
+                // Afficher la date sélectionnée dans l'EditText
+                monthDepenseEditText.setText(selectedDate)
+                Toast.makeText(this, "Sélectionné le mois de votre dépense : $selectedDate", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         submitButton.setOnClickListener {
-            val enteredText = inputField.text.toString()
+            val expenseDetailText = expenseDetail.text.toString()
+            val priceCostText = priceCost.text.toString()
+            val monthDepenseText = monthDepenseEditText.text.toString()
 
-            if (enteredText.isNotEmpty()) {
-                // Affichage du texte saisi par l'utilisateur
-                Toast.makeText(this, "Texte saisi : $enteredText", Toast.LENGTH_SHORT).show()
-
-                // Rediriger vers la page principale
+            // Vérifier que tous les champs sont remplis
+            if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-
-                // Fermer l'activité courante (AddCategorieActivity)
                 finish()
             } else {
-                // Message si le champ de saisie est vide
-                Toast.makeText(this, "Veuillez saisir du texte", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Veuillez saisir tous les champs", Toast.LENGTH_SHORT).show()
             }
         }
     }
+    override fun onNothingSelected(adapterView: AdapterView<*>?) {
+        // Aucune action spécifique lorsque rien n'est sélectionné
+    }
+
 
     override fun onItemSelected(adapterView: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val item = adapterView?.getItemAtPosition(position) as CategorieListItems
         Toast.makeText(this, item.spinnerText, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onNothingSelected(adapterView: AdapterView<*>?) {
-
     }
 }

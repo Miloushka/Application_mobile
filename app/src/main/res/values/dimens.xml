@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="default_margin">20dp</dimen>
+    <dimen name="margin_up_input">8dp</dimen>
+    <dimen name="margin_down_input">25dp</dimen>
+    <dimen name="height_input">50dp</dimen>
+    <dimen name="size_title_input">16sp</dimen>
+    <dimen name="default_margin_side">16dp</dimen>
 </resources>

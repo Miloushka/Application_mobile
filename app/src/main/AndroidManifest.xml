@@ -13,7 +13,8 @@
         android:theme="@style/Theme.Suggestion"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ConnectionActivity"
+            android:launchMode="singleTop"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +23,31 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AddCategorieActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:exported="true"/>
+
+        <activity
+            android:name=".MonthActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".AnnualActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".AccountActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".AddCategorieActivity"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:launchMode="singleTop" />
+
     </application>
 
 </manifest>

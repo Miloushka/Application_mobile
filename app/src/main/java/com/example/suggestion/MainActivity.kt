@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: BaseActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,5 +20,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AddCategorieActivity::class.java)
             startActivity(intent)
         }
+
+        setupBottomNavigation(R.id.bottom_navigation_home, R.id.bottom_home)
     }
 }

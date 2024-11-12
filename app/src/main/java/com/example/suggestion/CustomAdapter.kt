@@ -22,7 +22,7 @@ class CustomAdapter(
     }
 
     private fun customView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.categorie_spinner_layout, parent, false)
+        val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.activity_categorie_spinner, parent, false)
 
         val item = getItem(position)
 
