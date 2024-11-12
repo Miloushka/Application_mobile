@@ -2,24 +2,87 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bleu_turquoise"
     android:layout_marginLeft="@dimen/default_margin_side"
-    android:layout_marginRight="@dimen/default_margin_side">
+    android:layout_marginRight="@dimen/default_margin_side"
+    tools:context=".ConnectionActivity">
 
     <TextView
         android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bienvenue sur l'Application"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/logo"
+        android:layout_centerHorizontal="true"
         android:textSize="24sp" />
+    <!--android:layout_centerInParent="true"-->
+
 
     <Button
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Accéder à l'Application"
-        android:layout_below="@id/tv_welcome"
+        android:layout_below="@id/motdepasse"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="250dp" />
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/ic_euro"/>
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/logo"
+        android:paddingLeft="10dp"
+        android:inputType="textEmailAddress"
+        android:hint="exemple@gmail.com"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"/>
 
+    <EditText
+        android:id="@+id/motdepasse"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/email"
+        android:paddingLeft="10dp"
+        android:inputType="textPassword"
+        android:hint="mot de passe"
+        android:layout_marginTop="25dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"/>
+    <Button
+        android:id="@+id/seConnecter"
+        android:layout_width="200dp"
+        android:layout_below="@id/motdepasse"
+        android:layout_marginTop="25dp"
+        android:text="Se connecter"
+        android:layout_height="45dp"
+        />
+
+    <TextView
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/seConnecter"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="25dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toRightOf="@id/seConnecter"
+        android:text="Créer un compte ?" />
+    <!--android:gravity="right"-->
+    <TextView
+        android:textStyle="bold"
+        android:text="Besoin d'aide ?"
+        android:layout_below="@id/seConnecter"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </RelativeLayout>
