@@ -43,6 +43,11 @@
         <activity
             android:name=".AddCategorieActivity"
             android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ResetPasswordActivity"
+            android:launchMode="singleTop" />
+
     </application>
 
 </manifest>

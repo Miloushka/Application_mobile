@@ -11,13 +11,13 @@ class ConnectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connection)
 
-        // Trouver le bouton et définir un listener pour le clic
+//         <!--Trouver le bouton et définir un listener pour le clic -->
         val button = findViewById<Button>(R.id.btn_start)
         button.setOnClickListener {
-                // Rediriger vers MainActivity après le clic
+//            <!-- Rediriger vers MainActivity après le clic -->
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish() // Ferme la Splash Screen pour ne pas revenir dessus
+            finish()
         }
         }
     }

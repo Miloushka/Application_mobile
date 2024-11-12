@@ -7,7 +7,7 @@ import android.widget.Button
 import android.widget.ImageButton
 
 
-class MainActivity :BaseActivity()  {
+class MainActivity: BaseActivity()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

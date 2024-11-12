@@ -7,21 +7,21 @@
     <item
         android:id="@+id/bottom_home"
         android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:title="@string/navigation_bar_home"/>
 
     <item
         android:id="@+id/bottom_month"
         android:icon="@drawable/ic_month"
-        android:title="Month" />
+        android:title="@string/navigation_bar_month" />
 
     <item
         android:id="@+id/bottom_annual"
         android:icon="@drawable/ic_annual"
-        android:title="Annual" />
+        android:title="@string/navigation_bar_annual" />
 
     <item
         android:id="@+id/bottom_account"
         android:icon="@drawable/ic_setting"
-        android:title="Setting" />
+        android:title="@string/navigation_bar_account" />
 
 </menu>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_below="@id/confirmNewPasswd"
+    android:layout_marginLeft="@dimen/default_margin_side"
+    android:layout_marginRight="@dimen/default_margin_side"
     android:padding="16dp">
 
     <Spinner
@@ -14,18 +16,42 @@
 
     <!-- EditText (champ de saisie) -->
     <EditText
-        android:id="@+id/inputField"
+        android:id="@+id/expenseDetail"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="74dp"
         android:layout_marginTop="16dp"
-        android:hint="Détail de votre dépense"
+        android:hint="@string/add_categorie_detaildepense"
+        android:layout_below="@id/customSpinner"
         android:inputType="text" />
+
+    <EditText
+        android:id="@+id/priceCost"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/expenseDetail"
+        android:hint="@string/add_categorie_pricedepense"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/monthDepense"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginTop="16dp"
+        android:hint="@string/add_categorie_monthdepense"
+        android:focusable="false"
+        android:layout_below="@id/priceCost"
+        android:inputType="none" />
 
     <!-- Bouton pour soumettre la saisie -->
     <Button
         android:id="@+id/buttonSubmit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Soumettre" />
+        android:layout_height="53dp"
+        android:layout_below="@id/monthDepense"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/margin_down_input"
+        android:layout_marginEnd="7dp"
+        android:text="@string/add_categorie_submit_button" />
 
-</LinearLayout>
+</RelativeLayout>
