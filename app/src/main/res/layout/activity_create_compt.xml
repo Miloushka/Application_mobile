@@ -19,7 +19,7 @@
     <EditText
         android:id="@+id/Email2"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/bienvenue"
         android:paddingLeft="10dp"
         android:inputType="textEmailAddress"
@@ -31,7 +31,7 @@
     <EditText
         android:id="@+id/Motdepasse2"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/Email2"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="25dp"
@@ -42,7 +42,7 @@
     <EditText
         android:id="@+id/Motdepasse3"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_below="@+id/Motdepasse2"
         android:paddingLeft="10dp"
         android:inputType="textPassword"
@@ -72,7 +72,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="200dp"
         android:text="Se connecter"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         />
     <TextView
         android:textStyle="bold"
