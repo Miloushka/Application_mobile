@@ -48,6 +48,11 @@
             android:name=".ResetPasswordActivity"
             android:launchMode="singleTop" />
 
+        <activity
+            android:name="CreateComptActivity"
+            android:launchMode="singleTop"/>
+
+
     </application>
 
 </manifest>

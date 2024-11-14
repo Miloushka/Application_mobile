@@ -24,16 +24,19 @@ class ConnectionActivity : AppCompatActivity() {
             error.visibility = View.GONE
             val txtEmail = email.text.toString()
             val txtPassword = password.text.toString()
-            if(txtEmail.trim().isEmpty()|| txtPassword.trim().isEmpty()){
+            if (txtEmail.trim().isEmpty() || txtPassword.trim().isEmpty()) {
                 error.text = "vous devez remplir tout les champs !"
                 error.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 val correctEmail = "exemple@gmail.com"
                 val correctPassword = "azerty"
-                if(correctEmail == txtEmail && correctPassword == txtPassword ){
-                    Toast.makeText(this, "Bravo, Vous savez cliquer sur un bouton!", Toast.LENGTH_SHORT).show()
-                }else{
+                if (correctEmail == txtEmail && correctPassword == txtPassword) {
+                    Toast.makeText(
+                        this,
+                        "Bravo, Vous savez cliquer sur un bouton!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
                     error.text = "Email ou Mot de passe incorrect"
                     error.visibility = View.VISIBLE
                 }
@@ -41,17 +44,24 @@ class ConnectionActivity : AppCompatActivity() {
         }
 
 
-
-
-
-
-//         <!--Trouver le bouton et définir un listener pour le clic -->
+        //         <!--Trouver le bouton et définir un listener pour le clic -->
         val button = findViewById<Button>(R.id.btn_start)
         button.setOnClickListener {
 //            <!-- Rediriger vers MainActivity après le clic -->
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
+
         }
+
+        // Trouver le bouton et définir un listener pour le clic
+        val buttonCreateCompte = findViewById<Button>(R.id.create_compte)
+        buttonCreateCompte.setOnClickListener {
+            // Rediriger vers CreateCompteActivity après le clic
+            val intent = Intent(this, CreateComptActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
+}
+
