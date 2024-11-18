@@ -11,17 +11,21 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class ConnectionActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_connection)
 
-        val connect = findViewById<Button>(R.id.seConnecter)
+        val buttonSeconnecter = findViewById<Button>(R.id.seConnecter)
+        //val connect = findViewById<Button>(R.id.seConnecter)
         val email = findViewById<EditText>(R.id.email)
         val password = findViewById<EditText>(R.id.motdepasse)
         val error = findViewById<TextView>(R.id.error)
 
-        connect.setOnClickListener {
+        buttonSeconnecter.setOnClickListener {
+
             error.visibility = View.GONE
+
             val txtEmail = email.text.toString()
             val txtPassword = password.text.toString()
             if (txtEmail.trim().isEmpty() || txtPassword.trim().isEmpty()) {
@@ -31,12 +35,20 @@ class ConnectionActivity : AppCompatActivity() {
                 val correctEmail = "exemple@gmail.com"
                 val correctPassword = "azerty"
                 if (correctEmail == txtEmail && correctPassword == txtPassword) {
+                    val condition = true
+                    if (condition) {
+                        buttonSeconnecter.isEnabled = true
+                    }
                     Toast.makeText(
                         this,
-                        "Bravo, Vous savez cliquer sur un bouton!",
+                        "Bravo, étes connectée!",
                         Toast.LENGTH_SHORT
                     ).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 } else {
+                    buttonSeconnecter.isEnabled = false
                     error.text = "Email ou Mot de passe incorrect"
                     error.visibility = View.VISIBLE
                 }
@@ -53,6 +65,15 @@ class ConnectionActivity : AppCompatActivity() {
             finish()
 
         }
+        //         <!--Trouver le bouton et définir un listener pour le clic-->
+        //val buttonSeconnecter = findViewById<Button>(R.id.seConnecter)
+        //buttonSeconnecter.setOnClickListener {
+//            <!-- Rediriger vers MainActivity après le clic -->
+            //val intent = Intent(this, MainActivity::class.java)
+            //startActivity(intent)
+            //finish()
+
+        //}
 
         // Trouver le bouton et définir un listener pour le clic
         val buttonCreateCompte = findViewById<Button>(R.id.create_compte)
