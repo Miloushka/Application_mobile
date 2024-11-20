@@ -45,6 +45,7 @@ Pour référencer un élément prédéfini (tel qu'une couleur, une chaîne de t
 - **BaseActivity** : Gère la barre de navigation et permet de fermer le clavier lorsque l'utilisateur clique à l'extérieur d'un `EditText`.
 - **CategorieListItems** : Classe de liste déroulante des catégories.
 - **ConnectionActivity** : Permet de s'identifier.
+- **ComptCreateActivity** : Permet la création de compte.
 - **CustomAdapter** : Personnalise l'affichage de la liste déroulante des catégories.
 - **MainActivity** : Gère la page principale (home).
 - **MonthActivity** : Affiche les dépenses mensuelles.
@@ -61,6 +62,7 @@ Pour référencer un élément prédéfini (tel qu'une couleur, une chaîne de t
 - **activity_add_categorie** : Gère l'affichage de la page d'ajout de dépense.
 - **activity_categorie_spinner_layout** : Gère l'affichage de la liste déroulante des catégories.
 - **activity_connection** : Gère l'affichage de la page de connexion.
+- **activity_create_compt** : Gère l'affichage de la page de creation de compte.
 - **activity_annual** : Gère l'affichage de la page du budget annuel.
 - **activity_main** : Gère l'affichage de la page principale (home).
 - **activity_month** : Gère l'affichage de la page du budget mensuel.
