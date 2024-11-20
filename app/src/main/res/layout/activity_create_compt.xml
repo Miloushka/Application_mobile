@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bleu_turquoise"
+    android:background="@color/bleu_pastel_canva"
     tools:context=".ConnectionActivity">
 
     <TextView
@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="45dp"
         android:text="Bienvenue sur l'Application"
+
         android:layout_centerHorizontal="true"
         android:textSize="24sp" />
     <!--android:layout_centerInParent="true"-->
@@ -60,8 +61,9 @@
         android:layout_width="200dp"
         android:layout_below="@id/Motdepasse3"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="70dp"
         android:text="Se connecter"
+        android:backgroundTint="@color/violet_canva"
         android:layout_height="48dp"
         />
     <TextView

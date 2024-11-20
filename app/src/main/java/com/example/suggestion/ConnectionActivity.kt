@@ -65,15 +65,6 @@ class ConnectionActivity : AppCompatActivity() {
             finish()
 
         }
-        //         <!--Trouver le bouton et définir un listener pour le clic-->
-        //val buttonSeconnecter = findViewById<Button>(R.id.seConnecter)
-        //buttonSeconnecter.setOnClickListener {
-//            <!-- Rediriger vers MainActivity après le clic -->
-            //val intent = Intent(this, MainActivity::class.java)
-            //startActivity(intent)
-            //finish()
-
-        //}
 
         // Trouver le bouton et définir un listener pour le clic
         val buttonCreateCompte = findViewById<Button>(R.id.create_compte)

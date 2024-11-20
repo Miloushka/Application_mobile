@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/bleu_turquoise"
+    android:background="@color/bleu_pastel_canva"
     tools:context=".ConnectionActivity">
 
     <TextView
@@ -24,14 +24,19 @@
         android:text="Accéder à l'Application"
         android:layout_below="@id/motdepasse"
         android:layout_centerHorizontal="true"
+        android:backgroundTint="@color/violet_canva"
         android:layout_marginTop="250dp" />
+
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="300dp"
-        android:layout_height="100dp"
+        android:layout_width="292dp"
+        android:layout_height="137dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
-        android:src="@drawable/ic_euro"/>
+        android:src="@drawable/logo_evisual"
+
+        />
+
     <EditText
         android:id="@+id/email"
         android:layout_width="match_parent"
@@ -73,20 +78,23 @@
     <Button
         android:id="@+id/seConnecter"
         android:layout_width="250dp"
+        android:layout_height="55dp"
         android:layout_below="@id/error"
         android:layout_marginTop="25dp"
-        android:text="Se connecter"
-        android:layout_height="55dp"
-        />
+        android:layout_marginLeft="10dp"
+        android:backgroundTint="@color/violet_canva"
+        android:text="Se connecter" />
 
     <Button
         android:id="@+id/create_compte"
         android:layout_width="144dp"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/violet_canva"
         android:layout_alignBottom="@id/seConnecter"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="25dp"
         android:layout_toRightOf="@id/seConnecter"
+        android:layout_marginRight="10dp"
         android:text="Créer un compte ?" />
 
     <!--android:gravity="right"-->
@@ -99,4 +107,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         />
+
+
+
 </RelativeLayout>
