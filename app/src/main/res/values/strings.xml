@@ -54,4 +54,11 @@
     <string name="reset_passwd_page_new_passwd">Nouveau mot de passe</string>
     <string name="reset_passwd_page_confirm_new_passwd">Confimez votre mot de passe</string>
 
+    <!-- Page connection-->
+    <string name="aaa">aaa</string>
+
+    <!-- Page create compte-->
+    <string name="ss">ss</string>
+
+
 </resources>

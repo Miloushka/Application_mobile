@@ -7,4 +7,11 @@
     <color name="blue2">#65A6FA</color>
     <color name="bleu_turquoise">#00CADC</color>
     <color name="blue1">#257ADE</color>
+    <color name="message_d_erreur">#85050A</color>
+    <color name="bleu_canva">#5BB4F9</color>
+    <color name="lavande_canva">#7979D9</color>
+    <color name="turquoise_canva">#12CADC</color>
+    <color name="violet_canva">#9B57CC</color>
+    <color name="bleu_pastel_canva">#B6F4FF</color>
+
 </resources>
