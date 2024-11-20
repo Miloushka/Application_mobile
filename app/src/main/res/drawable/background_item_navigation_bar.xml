@@ -1,0 +1,19 @@
+<!-- res/drawable/bottom_background.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Quand l'élément est sélectionné -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/bleu_turquoise"/>
+            <corners android:radius="0dp" /> <!-- Bord arrondi -->
+        </shape>
+    </item>
+
+    <!-- Quand l'élément n'est pas sélectionné -->
+    <item android:state_selected="false">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/purple2" /> <!-- Couleur du fond non sélectionné -->
+            <corners android:radius="20dp" /> <!-- Bord arrondi -->
+        </shape>
+    </item>
+</selector>

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side"
+    android:layout_marginTop="@dimen/default_margin_side"
     android:focusable="true"
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -128,13 +129,5 @@
         android:hint="@string/account_page_dateofbirth_input"
         android:inputType="text" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation_account"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/background_navigation_barre"
-        app:menu="@menu/navigation_bar"
-        app:itemIconTint="@drawable/item_selector_navigation_bare"
-        app:itemRippleColor="@android:color/transparent" />
+
 </RelativeLayout>

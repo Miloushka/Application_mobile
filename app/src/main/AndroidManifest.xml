@@ -29,22 +29,6 @@
             android:exported="true"/>
 
         <activity
-            android:name=".MonthActivity"
-            android:launchMode="singleTop" />
-
-        <activity
-            android:name=".AnnualActivity"
-            android:launchMode="singleTop" />
-
-        <activity
-            android:name=".AccountActivity"
-            android:launchMode="singleTop" />
-
-        <activity
-            android:name=".AddCategorieActivity"
-            android:launchMode="singleTop" />
-
-        <activity
             android:name=".ResetPasswordActivity"
             android:launchMode="singleTop" />
 

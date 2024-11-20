@@ -16,8 +16,11 @@ class ResetPasswordActivity : AppCompatActivity() {
 
         // Redirection vers AccountActivity lors du clic sur le bouton
         resetPassword.setOnClickListener {
-            val intent = Intent(this, AccountActivity::class.java)
+            // Rediriger vers MainActivity
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("LOAD_ACCOUNT_FRAGMENT", true)
             startActivity(intent)
+            finish()
         }
     }
 }
