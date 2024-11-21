@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,6 @@ class MainActivity : AppCompatActivity(){
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
         val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
-
         // Configuration de la navigation par fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_home)
 
