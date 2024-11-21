@@ -1,8 +1,9 @@
 package com.example.suggestion
 
 interface DisplayableItem {
-    fun getTitle(): String // Le titre, comme la catégorie ou la description
-    fun getSubtitle(): String // Un sous-titre, comme le montant total ou une description
+    fun getTitle(): String
+    fun getSubtitle(): String
+    fun getDetails(): String
 }
 
 data class Expense(
@@ -12,7 +13,8 @@ data class Expense(
     val date: Long
 ) : DisplayableItem {
     override fun getTitle(): String = category
-    override fun getSubtitle(): String = "$price€ - $description"
+    override fun getSubtitle(): String = "$price€"
+    override fun getDetails(): String = description
 }
 
 data class CategoryTotal(
@@ -21,4 +23,5 @@ data class CategoryTotal(
 ) : DisplayableItem {
     override fun getTitle(): String = categoryName
     override fun getSubtitle(): String = "Total: $totalAmount€"
+    override fun getDetails(): String = categoryName
 }

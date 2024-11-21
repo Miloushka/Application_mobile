@@ -20,12 +20,19 @@ class AnnualFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Données des dépenses annuelles
         val annualExpenses = listOf(
-            CategoryTotal("Depense quotidienne", 100.00),
+            CategoryTotal("Dépenses quotidiennes", 100.00),
             CategoryTotal("Transport", 50.00),
-            CategoryTotal("Loisir", 200.00)
+            CategoryTotal("Loisir", 200.00),
+            CategoryTotal("Maison", 150.00)
         )
 
+        val pieChart: PieChart = view.findViewById(R.id.pie_chart)
+        pieChart.setData(annualExpenses)
+
+
+        // Configuration du RecyclerView
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_annual)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(annualExpenses, isAnnualView = true)

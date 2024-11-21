@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.suggestion.Expense
 
 class ExpenseAdapter(
     private val items: List<DisplayableItem>,
@@ -42,8 +41,8 @@ class ExpenseAdapter(
             holder.price.text = item.getSubtitle()
         } else {
             if (item is Expense) {
-                holder.description.text = item.description
-                holder.price.text = "${item.price}€"
+                holder.description.text = item.getDetails()
+                holder.price.text = item.getSubtitle()
             }
         }
    }

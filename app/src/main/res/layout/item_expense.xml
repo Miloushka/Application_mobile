@@ -55,6 +55,7 @@
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="@android:color/white"
                 android:text="100€" />
+
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
