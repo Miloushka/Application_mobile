@@ -47,7 +47,7 @@ class HomeFragment : Fragment() {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false)
+        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = true)
 
 
     }
