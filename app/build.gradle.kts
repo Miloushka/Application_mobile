@@ -33,10 +33,18 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+
+    //compileSdk = 33
+    //defaultConfig {
+        //minSdk = 21
+        //targetSdk = 33
+    //}
 }
 
 dependencies {
-
+    //implementation ('com.github.PhilJay:MPAndroidChart:v3.1.0')
+    //implementation(libs.mpandroidchart)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -45,5 +53,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 
 }

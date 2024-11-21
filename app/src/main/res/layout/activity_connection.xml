@@ -10,7 +10,7 @@
         android:id="@+id/tv_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Bienvenue sur l'Application"
+        android:text="@string/connect_app_message_bienvenue"
         android:layout_below="@id/logo"
         android:layout_centerHorizontal="true"
         android:textSize="24sp" />
@@ -21,18 +21,19 @@
         android:id="@+id/btn_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accéder à l'Application"
-        android:layout_below="@id/motdepasse"
+        android:text="@string/connect_app_button_acces_application"
+        android:layout_marginTop="35dp"
+        android:layout_below="@id/tv_welcome"
         android:layout_centerHorizontal="true"
         android:backgroundTint="@color/violet_canva"
-        android:layout_marginTop="250dp" />
+         />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="292dp"
         android:layout_height="137dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="45dp"
+
         android:src="@drawable/logo_evisual"
 
         />
@@ -41,11 +42,11 @@
         android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_below="@+id/logo"
+        android:layout_below="@+id/tv_welcome"
         android:paddingLeft="10dp"
         android:inputType="textEmailAddress"
-        android:hint="exemple@gmail.com"
-        android:layout_marginTop="50dp"
+        android:hint="@string/connect_app_page_mail"
+        android:layout_marginTop="100dp"
         android:layout_marginHorizontal="10dp"
         android:background="@color/white"/>
 
@@ -56,7 +57,7 @@
         android:layout_below="@+id/email"
         android:paddingLeft="10dp"
         android:inputType="textPassword"
-        android:hint="mot de passe"
+        android:hint="@string/connect_app_page_mot_de_passe"
         android:layout_marginTop="25dp"
         android:layout_marginHorizontal="10dp"
         android:background="@color/white"/>
@@ -83,7 +84,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginLeft="10dp"
         android:backgroundTint="@color/violet_canva"
-        android:text="Se connecter" />
+        android:text="@string/connect_app_button_connextion" />
 
     <Button
         android:id="@+id/create_compte"
@@ -95,7 +96,7 @@
         android:layout_marginLeft="25dp"
         android:layout_toRightOf="@id/seConnecter"
         android:layout_marginRight="10dp"
-        android:text="Créer un compte ?" />
+        android:text="@string/connect_app_button_creation_compte" />
 
     <!--android:gravity="right"-->
     <TextView
