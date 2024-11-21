@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bleu_pastel_canva"
+    tools:context=".ConnectionActivity">
+
+    <TextView
+        android:id="@+id/bienvenue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="Bienvenue sur l'Application"
+
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp" />
+    <!--android:layout_centerInParent="true"-->
+
+    <EditText
+        android:id="@+id/Email2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/bienvenue"
+        android:paddingLeft="10dp"
+        android:inputType="textEmailAddress"
+        android:hint="exemple@gmail.com"
+        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"/>
+
+    <EditText
+        android:id="@+id/Motdepasse2"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/Email2"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="25dp"
+        android:background="@color/white"
+        android:hint="mot de passe"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp" />
+    <EditText
+        android:id="@+id/Motdepasse3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_below="@+id/Motdepasse2"
+        android:paddingLeft="10dp"
+        android:inputType="textPassword"
+        android:hint="Confirmation mot de passe"
+        android:layout_marginTop="25dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@color/white"/>
+
+
+
+
+
+    <Button
+        android:id="@+id/seConnecter2"
+        android:layout_width="200dp"
+        android:layout_below="@id/Motdepasse3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:text="Se connecter"
+        android:backgroundTint="@color/violet_canva"
+        android:layout_height="48dp"
+        />
+    <TextView
+        android:id="@+id/besoin_d_aide"
+        android:textStyle="bold"
+        android:text="Besoin d'aide ?"
+        android:layout_below="@id/seConnecter2"
+        android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/error2"
+        android:layout_below="@id/Motdepasse3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/message_d_erreur"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

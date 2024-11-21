@@ -6,7 +6,6 @@
     <color name="purple2">#7E80E7</color>
     <color name="blue2">#65A6FA</color>
     <color name="bleu_turquoise">#00CADC</color>
-    <color name="blue1">#FFFFFF</color>
 
     <color name="shoppingColor">#FF0000</color>  <!-- Rouge pour Course -->
     <color name="homeColor">#0000FF</color>  <!-- Bleu pour Maison -->
@@ -19,4 +18,12 @@
     <color name="bottom_nav_active">#FF6200EE</color> <!-- Couleur pour l'icône active -->
     <color name="bottom_nav_inactive">#FFBDBDBD</color> <!-- Couleur pour l'icône inactive -->
     <color name="bottom_nav_background">#FA1313</color>
+    <color name="blue1">#257ADE</color>
+    <color name="message_d_erreur">#85050A</color>
+    <color name="bleu_canva">#5BB4F9</color>
+    <color name="lavande_canva">#7979D9</color>
+    <color name="turquoise_canva">#12CADC</color>
+    <color name="violet_canva">#9B57CC</color>
+    <color name="bleu_pastel_canva">#B6F4FF</color>
+
 </resources>
