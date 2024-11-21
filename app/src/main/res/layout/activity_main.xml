@@ -23,7 +23,7 @@
         android:id="@+id/icon_main"
         android:layout_width="72dp"
         android:layout_height="79dp"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/logo_evisual_white" />
 
     <FrameLayout
         android:id="@+id/fragment_container"

@@ -45,14 +45,9 @@ class HomeFragment : Fragment() {
             Expense("Maison", 15.00, "Movie night", 1699965600000)
         )
 
-        // Tri des dépenses par date croissante
-        val sortedExpenses = expenses.sortedBy { it.date }
-
-        // Configuration du RecyclerView
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(sortedExpenses)
-
+        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false)
 
 
     }
