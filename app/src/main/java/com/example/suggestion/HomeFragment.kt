@@ -1,3 +1,9 @@
+// Ce fragment affiche l'écran principal de l'application avec une liste de dépenses.
+// Il permet également d'ouvrir un dialogue pour ajouter une nouvelle catégorie de dépense.
+// Les dépenses sont agrégées par catégorie et affichées sous forme de graphique circulaire
+// et d'une liste recyclée. Le fragment gère l'ajout de catégories via un dialogue et la mise
+// à jour de la vue en fonction des données des dépenses.
+
 package com.example.suggestion
 
 import android.os.Bundle
@@ -45,10 +51,22 @@ class HomeFragment : Fragment() {
             Expense("Maison", 15.00, "Movie night", 1699965600000)
         )
 
+        val aggregatedExpenses = aggregateExpensesByCategory(expenses)
+        val pieChart: PieChart = view.findViewById(R.id.pie_chart)
+        pieChart.setData(aggregatedExpenses)
+
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = true)
-
-
+        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment= false)
     }
+
+    private fun aggregateExpensesByCategory(expenses: List<Expense>): List<CategoryTotal> {
+        return expenses
+            .groupBy { it.category }
+            .map { (category, expenseList) ->
+                val totalAmount = expenseList.sumOf { it.price }
+                CategoryTotal(category, totalAmount)
+            }
+    }
+
 }

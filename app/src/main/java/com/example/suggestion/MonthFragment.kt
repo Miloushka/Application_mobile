@@ -1,102 +1,69 @@
+//Fragment représentant la vue des dépenses mensuelles
+//Affichage regroupé par catégorie, avec le prix total, l'affichage de la card comporte
+//egalement le description de chaque dépense avec son prix associé
 package com.example.suggestion
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.suggestion.data.MyDatabase
-import com.example.suggestion.data.MyEntity
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MonthFragment : Fragment() {
-
-    private lateinit var database: MyDatabase // Votre base de données Room
-    private lateinit var editTextName: EditText // Le champ de texte pour entrer un nom
-    private lateinit var buttonAdd: Button // Le bouton pour ajouter l'élément
-    private lateinit var recyclerView: RecyclerView // RecyclerView pour afficher les données
-    private lateinit var adapter: MyEntityAdapter // L'adaptateur du RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = inflater.inflate(R.layout.fragment_month, container, false)
-
-        // Initialiser la base de données Room
-        database = MyDatabase.getDatabase(requireContext())
-
-        // Récupérer les vues
-        editTextName = binding.findViewById(R.id.editTextName)
-        buttonAdd = binding.findViewById(R.id.buttonAdd)
-        recyclerView = binding.findViewById(R.id.recyclerView)
-
-        // Initialiser le RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter = MyEntityAdapter()
-        recyclerView.adapter = adapter
-
-        // Écouter le clic sur le bouton "Ajouter"
-        buttonAdd.setOnClickListener {
-            val name = editTextName.text.toString().trim()
-
-            if (name.isNotEmpty()) {
-                // Ajouter l'élément à la base de données et recharger les données
-                addDataAndRefresh(name)
-                editTextName.text.clear() // Vider le champ de saisie
-            } else {
-                Toast.makeText(requireContext(), "Le champ ne peut pas être vide", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        // Charger les données dès que la vue est créée
-        loadData()
-
-        return binding
+        return inflater.inflate(R.layout.fragment_month, container, false)
     }
 
-    private fun addDataAndRefresh(name: String) {
-        // Créer un nouvel objet MyEntity
-        val newEntity = MyEntity(name = name)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // Insérer dans la base de données
-        lifecycleScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    database.myDao().insert(newEntity) // Insertion de la donnée
-                }
+        // Exemple de données
+        val expenses = listOf(
+            Expense("Depense quotidienne", 13.30, "Lunch at a restaurant lundi", 1699954800000),
+            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
+            Expense("Loisir", 45.00, "New shoes", 1699962000000),
+            Expense("Maison", 15.00, "Movie night", 1699965600000),
+            Expense("Depense quotidienne", 14.50, "Lunch at a restaurant mardi", 1699954800000),
+            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
+            Expense("Loisir", 45.00, "New shoes", 1699962000000),
+            Expense("Maison", 15.00, "Movie night", 1699965600000),
+            Expense("Depense quotidienne", 15.50, "Lunch at a restaurant mercredi", 1699954800000),
+            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
+            Expense("Loisir", 45.00, "New shoes", 1699962000000),
+            Expense("Maison", 15.00, "Movie night", 1699965600000)
+        )
 
-                // Une fois la donnée insérée, récupérer toutes les données et les afficher
-                loadData()
 
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Erreur d'ajout", Toast.LENGTH_SHORT).show()
-            }
-        }
+        val consolidatedExpenses = consolidateExpenses(expenses)
+
+
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_month)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isAnnualView = false, isMonthFragment= true)
     }
 
-    private fun loadData() {
-        // Récupérer les données depuis la base de données et mettre à jour l'adaptateur
-        lifecycleScope.launch {
-            try {
-                // Récupérer toutes les données depuis la base de données
-                val data = withContext(Dispatchers.IO) {
-                    database.myDao().getAll() // Récupérer toutes les entités
-                }
 
-                // Mettre à jour l'adaptateur avec les nouvelles données
-                adapter.submitList(data)
+    private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
+        val groupedExpenses = expenses.groupBy { it.category }
 
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Erreur lors de la récupération des données", Toast.LENGTH_SHORT).show()
+        return groupedExpenses.map { (category, categoryExpenses) ->
+            val totalPrice = categoryExpenses.sumOf { it.price }
+            val concatenatedDescriptions = categoryExpenses.joinToString(separator = "\n") { it.description }
+            val descriptionWithPrices = categoryExpenses.map { "${it.price}€" }
+            val descriptionWithPricesStr = descriptionWithPrices.joinToString(separator = "\n")
+            Expense(
+                category = category,
+                price = totalPrice,
+                description = concatenatedDescriptions,
+                date = 0
+            ).apply {
+                this.detailPrices = descriptionWithPricesStr
             }
         }
     }

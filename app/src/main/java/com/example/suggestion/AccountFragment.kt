@@ -1,3 +1,5 @@
+// Ce fragment permet de d'afficher les informations personnelles de l'utilisateur, redirection vers l'activity ResetPassword
+
 package com.example.suggestion
 
 import android.content.Intent

@@ -4,25 +4,9 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- EditText pour entrer le nom -->
-    <EditText
-        android:id="@+id/editTextName"
-        android:layout_width="match_parent"
-        android:layout_height="119dp"
-        android:hint="Entrez un nom" />
-
-    <!-- Bouton pour ajouter l'élément -->
-    <Button
-        android:id="@+id/buttonAdd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ajouter" />
-
-    <!-- RecyclerView pour afficher les données -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/recycler_view_month"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginTop="16dp" />
+        android:layout_height="match_parent"/>
+
 </LinearLayout>

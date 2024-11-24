@@ -1,3 +1,9 @@
+// Cette activité sert de point d'entrée pour l'application et contient un BottomNavigationView
+// pour permettre la navigation entre différents fragments (Home, Month, Annual, Account).
+// Elle charge un fragment par défaut (HomeFragment) et permet de naviguer vers d'autres fragments
+// à l'aide du menu de navigation. En outre, elle détecte les clics en dehors des EditText pour
+// masquer le clavier virtuel lorsque l'utilisateur interagit avec l'interface.
+
 package com.example.suggestion
 
 import android.content.Context

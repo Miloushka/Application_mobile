@@ -1,3 +1,5 @@
+//utilitaire pour afficher un sélecteur de date et obtenir la date sélectionnée formatée.
+
 package com.example.suggestion
 
 import android.app.DatePickerDialog

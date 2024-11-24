@@ -1,3 +1,6 @@
+// Ce fragment affiche un résumé des dépenses annuelles sous forme de graphique circulaire (PieChart)
+// et d'une liste détaillée dans un RecyclerView. Les données sont présentées pour chaque catégorie de dépense.
+
 package com.example.suggestion
 
 import android.os.Bundle
@@ -22,11 +25,12 @@ class AnnualFragment : Fragment() {
 
         // Données des dépenses annuelles
         val annualExpenses = listOf(
-            CategoryTotal("Dépenses quotidiennes", 100.00),
+            CategoryTotal("Depense quotidienne", 100.00),
             CategoryTotal("Transport", 50.00),
             CategoryTotal("Loisir", 200.00),
             CategoryTotal("Maison", 150.00)
         )
+
 
         val pieChart: PieChart = view.findViewById(R.id.pie_chart)
         pieChart.setData(annualExpenses)
@@ -35,6 +39,6 @@ class AnnualFragment : Fragment() {
         // Configuration du RecyclerView
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_annual)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(annualExpenses, isAnnualView = true)
+        recyclerView.adapter = ExpenseAdapter(annualExpenses, isAnnualView = true, isMonthFragment= false)
     }
 }
