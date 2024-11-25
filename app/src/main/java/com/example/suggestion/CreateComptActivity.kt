@@ -1,6 +1,9 @@
+// Cette activité gère la connexion des utilisateurs en vérifiant leurs identifiants.
+// Elle redirige vers l'activité principale (`MainActivity`) après une connexion réussie
+// ou affiche des messages d'erreur en cas d'échec. Elle propose également des options pour
+// créer un compte ou accéder directement à l'application.
+
 package com.example.suggestion;
-
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.View

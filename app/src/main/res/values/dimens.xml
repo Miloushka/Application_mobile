@@ -6,4 +6,5 @@
     <dimen name="height_input">50dp</dimen>
     <dimen name="size_title_input">16sp</dimen>
     <dimen name="default_margin_side">16dp</dimen>
+    <dimen name="default_radus">20dp</dimen>
 </resources>

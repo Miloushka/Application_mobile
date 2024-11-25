@@ -7,6 +7,7 @@
     <color name="blue2">#65A6FA</color>
     <color name="bleu_turquoise">#00CADC</color>
 
+
     <color name="shoppingColor">#FF0000</color>  <!-- Rouge pour Course -->
     <color name="homeColor">#0000FF</color>  <!-- Bleu pour Maison -->
     <color name="loisirColor">#FF9500</color>  <!-- Vert pour Loisir -->

@@ -4,3 +4,4 @@ data class CategorieListItems (
     val spinnerText: String,
     val spinnerImage: Int
     )
+
