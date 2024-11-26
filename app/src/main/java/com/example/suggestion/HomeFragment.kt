@@ -22,7 +22,23 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        // Gonfler le layout pour ce fragment
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+
+        // Configuration initiale de PieChart
+        val pieChart: PieChart = rootView.findViewById(R.id.pie_chart)
+        pieChart.setData(listOf(
+            CategoryTotal("Category1", 40.0),
+            CategoryTotal("Category2", 60.0)
+        ))
+        pieChart.setCenterText("100 €")
+
+        return rootView
+
+
+        //return inflater.inflate(R.layout.fragment_home, container, false)
+
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
