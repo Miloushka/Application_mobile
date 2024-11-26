@@ -35,16 +35,11 @@ android {
     }
 
 
-    //compileSdk = 33
-    //defaultConfig {
-        //minSdk = 21
-        //targetSdk = 33
-    //}
+
 }
 
 dependencies {
-    //implementation ('com.github.PhilJay:MPAndroidChart:v3.1.0')
-    //implementation(libs.mpandroidchart)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
