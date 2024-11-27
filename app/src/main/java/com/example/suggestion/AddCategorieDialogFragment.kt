@@ -1,3 +1,7 @@
+// Ce fragment permet d'ajouter une nouvelle catégorie de dépense via une interface modale (dialog),
+// avec un sélecteur de date et un spinner pour choisir la catégorie.
+// Lors de la soumission, si tous les champs sont remplis, la dépense est ajoutée.
+
 package com.example.suggestion
 
 import android.app.Dialog

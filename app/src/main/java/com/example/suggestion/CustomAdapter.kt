@@ -1,3 +1,7 @@
+// Cet adaptateur personnalisé gère l'affichage des éléments dans un spinner.
+// Il associe chaque élément de la liste à une vue contenant une image et un texte,
+// permettant de personnaliser l'apparence des options dans le menu déroulant pour ajouter une dépense.
+
 package com.example.suggestion
 
 import android.content.Context

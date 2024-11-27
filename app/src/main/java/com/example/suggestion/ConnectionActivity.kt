@@ -1,6 +1,9 @@
+// Cette activité gère la connexion des utilisateurs en validant leurs identifiants.
+// Elle offre des options pour accéder à l'application principale (`MainActivity`) après une connexion réussie,
+// ou pour créer un nouveau compte en redirigeant vers l'activité `CreateComptActivity`.
+// Elle affiche des messages d'erreur en cas de champs vides ou d'identifiants incorrects.
+
 package com.example.suggestion
-
-
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -35,10 +38,7 @@ class ConnectionActivity : AppCompatActivity() {
                 val correctEmail = "exemple@gmail.com"
                 val correctPassword = "azerty"
                 if (correctEmail == txtEmail && correctPassword == txtPassword) {
-                    val condition = true
-                    if (condition) {
-                        buttonSeconnecter.isEnabled = true
-                    }
+
                     Toast.makeText(
                         this,
                         "Bravo, étes connectée!",
@@ -48,9 +48,10 @@ class ConnectionActivity : AppCompatActivity() {
                     startActivity(intent)
                     finish()
                 } else {
-                    buttonSeconnecter.isEnabled = false
+                    
                     error.text = "Email ou Mot de passe incorrect"
                     error.visibility = View.VISIBLE
+                    buttonSeconnecter.isEnabled = true
                 }
             }
         }

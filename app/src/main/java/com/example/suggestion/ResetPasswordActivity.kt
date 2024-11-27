@@ -1,3 +1,5 @@
+// Activity qui permet de réinisialiser son mot de passe
+
 package com.example.suggestion
 
 import android.content.Intent

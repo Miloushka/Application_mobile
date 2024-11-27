@@ -14,7 +14,7 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginTop="50dp"
         android:text="@string/account_page_title"
         android:textSize="25sp"
         android:textStyle="bold"
