@@ -6,6 +6,8 @@
     <color name="purple2">#7E80E7</color>
     <color name="blue2">#65A6FA</color>
     <color name="bleu_turquoise">#00CADC</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#008000</color>
 
 
     <color name="shoppingColor">#5BB4F9</color>  <!-- Bleu_canva pour Course -->

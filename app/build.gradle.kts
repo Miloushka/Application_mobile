@@ -1,7 +1,10 @@
+
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     kotlin("kapt")
+
 }
 
 android {
@@ -37,6 +40,7 @@ android {
 }
 
 dependencies {
+
     implementation(kotlin("stdlib"))
     implementation ("androidx.room:room-runtime:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")

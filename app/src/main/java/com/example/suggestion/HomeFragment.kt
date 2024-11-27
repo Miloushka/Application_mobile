@@ -6,6 +6,7 @@
 
 package com.example.suggestion
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,26 +19,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HomeFragment : Fragment() {
 
+    private val initialRevenue = 1200.0 // Revenu initial de la personne
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Gonfler le layout pour ce fragment
-        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
-
-        // Configuration initiale de PieChart
-        val pieChart: PieChart = rootView.findViewById(R.id.pie_chart)
-        pieChart.setData(listOf(
-            CategoryTotal("Category1", 40.0),
-            CategoryTotal("Category2", 60.0)
-        ))
-        pieChart.setCenterText("100 €")
-
-        return rootView
-
-
-        //return inflater.inflate(R.layout.fragment_home, container, false)
-
+        return inflater.inflate(R.layout.fragment_home, container, false)
 
     }
 
@@ -71,9 +61,24 @@ class HomeFragment : Fragment() {
         val pieChart: PieChart = view.findViewById(R.id.pie_chart)
         pieChart.setData(aggregatedExpenses)
 
+        // Calcul de la somme des dépenses et du revenu restant
+        val totalExpenses = expenses.sumOf { it.price }
+        val remainingRevenue = initialRevenue - totalExpenses
+
+        // Ajouter les textes au centre du diagramme
+        pieChart.setCenterTexts(
+            listOf(
+                Pair("${totalExpenses} €", Color.RED),       // Dépenses en rouge
+                Pair("${remainingRevenue} €", Color.GREEN)  // Revenu restant en vert
+            )
+        )
+
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment= false)
+
+
+
     }
 
     private fun aggregateExpensesByCategory(expenses: List<Expense>): List<CategoryTotal> {
