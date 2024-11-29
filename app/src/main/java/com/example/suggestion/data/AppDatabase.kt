@@ -10,6 +10,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun expenseDao(): ExpenseDao
 
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -26,4 +27,5 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
     }
+
 }
