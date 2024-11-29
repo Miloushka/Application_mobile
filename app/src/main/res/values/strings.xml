@@ -32,6 +32,7 @@
     <string name="account_page_first_name_input">Saisissez votre prénom</string>
     <string name="account_page_dateofbirth">Date de naissance</string>
     <string name="account_page_dateofbirth_input">Saisissez votre date de naissance</string>
+    <string name="account_page_disconnect">Se Deconnecter</string>
 
 
     <!-- Page add_categorie -->

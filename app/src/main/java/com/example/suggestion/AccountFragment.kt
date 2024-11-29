@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -41,6 +42,15 @@ class AccountFragment : Fragment() {
                 dateOfBirthEditText.setText(selectedDate)
                 Toast.makeText(requireContext(), "Anniversaire sélectionné : $selectedDate", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // Bouton de déconnexion
+        val logoutButton = view.findViewById<TextView>(R.id.disconnect)
+        logoutButton.setOnClickListener {
+            // Redirection vers ConnectionActivity
+            val intent = Intent(requireActivity(), ConnectionActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish() // Terminer l'activité actuelle pour éviter le retour en arrière
         }
 
     }
