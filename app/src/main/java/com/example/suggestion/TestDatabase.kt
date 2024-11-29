@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.suggestion.data.MyDatabase
 import com.example.suggestion.data.MyEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
