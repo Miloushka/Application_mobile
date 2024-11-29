@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 // Donne les données à l'interface utilisateur et applique les changements de configurations
+//écrit par Jean-Guilhem
 
 class UserViewModel(application: Application): AndroidViewModel(application) {
 
