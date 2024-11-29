@@ -7,6 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +26,11 @@ class MonthFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val datePickerFragment = DatePickerFragment.newInstance(true)
+        childFragmentManager.beginTransaction()
+            .replace(R.id.date_picker_container, datePickerFragment)
+            .commit()
 
         // Exemple de données
         val expenses = listOf(
@@ -46,7 +55,9 @@ class MonthFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_month)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isAnnualView = false, isMonthFragment= true)
+
     }
+
 
 
     private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {

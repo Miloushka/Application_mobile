@@ -23,6 +23,11 @@ class AnnualFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val datePickerFragment = DatePickerFragment.newInstance(false)
+        childFragmentManager.beginTransaction()
+            .replace(R.id.date_picker_container, datePickerFragment)
+            .commit()
+
         // Données des dépenses annuelles
         val annualExpenses = listOf(
             CategoryTotal("Depense quotidienne", 100.00),
@@ -40,5 +45,6 @@ class AnnualFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_annual)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(annualExpenses, isAnnualView = true, isMonthFragment= false)
+
     }
 }
