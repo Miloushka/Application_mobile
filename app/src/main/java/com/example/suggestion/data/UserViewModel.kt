@@ -27,13 +27,14 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     }
 
     // fonction permmettant de se connecter
-    fun login(email: String, onSuccess: (User) -> Unit, onError: (String) -> Unit) {
+    fun login(email: String, password: String, onSuccess: (User) -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             val user = userDao.getUserByEmail(email)
             if (user != null) {
+                if(password == user.password){
                 currentUser = user
                 onSuccess(user)
-            } else {
+            }} else {
                 onError("Email incorrect.")
             }
         }
