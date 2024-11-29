@@ -17,6 +17,9 @@ class DatePickerFragment : Fragment() {
     private lateinit var monthSpinner: Spinner
     private lateinit var selectedDateTextView: TextView
 
+    // Indicateur si le mois doit être inclus ou non
+    private var withMonth: Boolean = true
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,46 +30,75 @@ class DatePickerFragment : Fragment() {
         monthSpinner = view.findViewById(R.id.spinner_month)
         selectedDateTextView = view.findViewById(R.id.selected_date)
 
+        // Récupérer l'argument pour déterminer si le mois doit être inclus
+        withMonth = arguments?.getBoolean("withMonth") ?: true
+
         setupSpinners()
 
         return view
     }
 
     private fun setupSpinners() {
+        // Récupération de l'année et du mois actuels
+        val calendar = Calendar.getInstance()
+        val currentYear = calendar.get(Calendar.YEAR)
+        val currentMonth = calendar.get(Calendar.MONTH) // Mois courant (0-11)
+
         // Configuration du spinner pour l'année
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val years = (1900..currentYear).toList().reversed()
+        val years = (1900..currentYear).toList().reversed() // Liste des années de 1900 à l'année actuelle
         yearSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
 
-        // Configuration du spinner pour le mois
-        val months = listOf("Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre")
-        monthSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, months)
+        // Configuration du spinner pour le mois si nécessaire
+        if (withMonth) {
+            val months = listOf(
+                "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet",
+                "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+            )
+            monthSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, months)
+            monthSpinner.visibility = View.VISIBLE
 
-        // Gestion des changements de sélection
+            // Sélectionner le mois et l'année actuels par défaut
+            monthSpinner.setSelection(currentMonth) // Mois actuel
+            yearSpinner.setSelection(years.indexOf(currentYear)) // Année actuelle
+        } else {
+            monthSpinner.visibility = View.GONE
+            yearSpinner.setSelection(years.indexOf(currentYear)) // Sélectionner l'année actuelle
+        }
+
+        // Écouteur pour la sélection de l'année
         yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 updateSelectedDate()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Écouteur pour la sélection du mois si nécessaire
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 updateSelectedDate()
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
     private fun updateSelectedDate() {
         val selectedYear = yearSpinner.selectedItem as Int
-        val selectedMonth = monthSpinner.selectedItemPosition + 1 // car position commence à 0
+        val selectedMonth = monthSpinner.selectedItemPosition + 1 // Car les mois commencent à 0
 
-        // Formattage selon le fragment : mois + année ou juste l'année
-        selectedDateTextView.text = "Date sélectionnée : $selectedMonth/$selectedYear"
+        if (withMonth) {
+            // Mise à jour de la TextView avec mois et année
+            selectedDateTextView.text = "Date sélectionnée : $selectedMonth/$selectedYear"
+        } else {
+            // Mise à jour de la TextView avec uniquement l'année
+            selectedDateTextView.text = "Date sélectionnée : $selectedYear"
+        }
     }
 
     companion object {
+        // Méthode pour créer une instance du fragment avec ou sans mois
         fun newInstance(withMonth: Boolean): DatePickerFragment {
             val fragment = DatePickerFragment()
             val args = Bundle()
@@ -78,6 +110,7 @@ class DatePickerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Récupérer l'argument pour afficher ou non le mois
         val withMonth = arguments?.getBoolean("withMonth") ?: true
         monthSpinner.visibility = if (withMonth) View.VISIBLE else View.GONE
     }

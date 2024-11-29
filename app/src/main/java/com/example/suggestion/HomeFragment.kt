@@ -15,6 +15,9 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class HomeFragment : Fragment() {
@@ -65,13 +68,12 @@ class HomeFragment : Fragment() {
         val totalExpenses = expenses.sumOf { it.price }
         val remainingRevenue = initialRevenue - totalExpenses
 
-
+        val currentDate = getCurrentDate()
+        // Logique pour envoyer cette date à la base de données
 
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment= false)
-
-
 
     }
 
@@ -82,6 +84,12 @@ class HomeFragment : Fragment() {
                 val totalAmount = expenseList.sumOf { it.price }
                 CategoryTotal(category, totalAmount)
             }
+    }
+
+    private fun getCurrentDate(): String {
+        val calendar = Calendar.getInstance()
+        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) // Format de date exemple
+        return dateFormat.format(calendar.time) // Retourne la date actuelle sous forme de String
     }
 
 }
