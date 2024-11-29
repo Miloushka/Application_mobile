@@ -42,7 +42,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 error2.visibility = View.VISIBLE
             } else {
                 // Si tout est correct, rediriger vers MainActivity
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, ConnectionActivity::class.java)
                 startActivity(intent)
                 finish()
             }
