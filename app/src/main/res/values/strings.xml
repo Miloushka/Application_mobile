@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Suggestion</string>
+    <string name="app_name">Evisual</string>
 
 
     <!-- Barre navigation -->
@@ -54,11 +54,22 @@
     <string name="reset_passwd_page_new_passwd">Nouveau mot de passe</string>
     <string name="reset_passwd_page_confirm_new_passwd">Confimez votre mot de passe</string>
 
-    <!-- Page connection-->
-    <string name="aaa">aaa</string>
+    <!-- Page Connection Application-->
+    <string name="connect_app_button_acces_application">Accéder à l\'Application</string>
+    <string name="connect_app_message_bienvenue">Bienvenue dans l\'Application</string>
+    <string name="connect_app_page_mail">exemple@gmail.com</string>
+    <string name="connect_app_page_mot_de_passe">mot de passe</string>
+    <string name="connect_app_button_connextion">Se connecter</string>
+    <string name="connect_app_button_creation_compte">Creer un compte ?</string>
+    <string name="connect_app_button_besoin_aide">Besoin d\'aide</string>
 
     <!-- Page create compte-->
-    <string name="ss">ss</string>
+    <string name="create_compte_message_intro">Creation de Compte</string>
+    <string name="create_compte_page_mail">exemple@gmail.com</string>
+    <string name="create_compte_page_mot_de_passe">mot de passe</string>
+    <string name="create_compte_page_confirmation_mot_de_passe">Confirmation mot de passe</string>
+    <string name="create_compte_button_connextion">Se connecter</string>
+    <string name="create_compte_besoin_aide">Besoin d\'aide ?</string>
 
 
 </resources>

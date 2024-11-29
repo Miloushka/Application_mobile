@@ -6,13 +6,16 @@
     <color name="purple2">#7E80E7</color>
     <color name="blue2">#65A6FA</color>
     <color name="bleu_turquoise">#00CADC</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#008000</color>
 
 
-    <color name="shoppingColor">#FF0000</color>  <!-- Rouge pour Course -->
-    <color name="homeColor">#0000FF</color>  <!-- Bleu pour Maison -->
-    <color name="loisirColor">#FF9500</color>  <!-- Vert pour Loisir -->
-    <color name="transportColor">#00E6FF</color>
-    <color name="defaultColor">#00FF00</color>
+    <color name="shoppingColor">#5BB4F9</color>  <!-- Bleu_canva pour Course -->
+    <color name="homeColor">#7979D9</color>  <!-- Lavande_canva pour Maison -->
+    <color name="loisirColor">#12CADC</color>  <!-- turquoise_canva pour Loisir -->
+    <color name="transportColor">#9B57CC</color> <!-- Violet_canva pour Loisir -->
+    <color name="defaultColor">#B6F4FF</color><!-- Bleu_pastel_canva pour Loisir -->
+
 
     <color name="priceTextColor">#F6F6F6</color>
 
@@ -21,6 +24,8 @@
     <color name="bottom_nav_background">#FA1313</color>
     <color name="blue1">#257ADE</color>
     <color name="message_d_erreur">#85050A</color>
+
+    <!-- couleur Canva-->
     <color name="bleu_canva">#5BB4F9</color>
     <color name="lavande_canva">#7979D9</color>
     <color name="turquoise_canva">#12CADC</color>
