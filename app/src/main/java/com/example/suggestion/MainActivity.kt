@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+
     // Méthode pour configurer la détection de clic en dehors des EditTexts pour fermer le clavier
     private fun setupUI(view: View) {
         // Appliquer un OnTouchListener pour cacher le clavier si on clique en dehors des EditText
