@@ -1,12 +1,6 @@
-// Ce fragment affiche l'écran principal de l'application avec une liste de dépenses.
-// Il permet également d'ouvrir un dialogue pour ajouter une nouvelle catégorie de dépense.
-// Les dépenses sont agrégées par catégorie et affichées sous forme de graphique circulaire
-// et d'une liste recyclée. Le fragment gère l'ajout de catégories via un dialogue et la mise
-// à jour de la vue en fonction des données des dépenses.
-
 package com.example.suggestion
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +9,12 @@ import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-
 
 class HomeFragment : Fragment() {
 
@@ -28,10 +24,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        // Gonfler le layout pour ce fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,42 +34,39 @@ class HomeFragment : Fragment() {
         val addCategorieButton: ImageButton = view.findViewById(R.id.button_open_add_categorie)
         addCategorieButton.setOnClickListener {
             val dialog = AddCategorieDialogFragment()
-            dialog.show(requireFragmentManager(), "AddCategorieDialogFragment")
+            dialog.show(parentFragmentManager, "AddCategorieDialogFragment")
         }
 
-        // Liste d'exemples de dépenses
-        val expenses = listOf(
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000),
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000),
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000)
-        )
+        // Charger les données depuis le fichier JSON
+        val expenses = loadExpensesFromJson(requireContext(), "expenses.json")
 
+        // Agréger les dépenses par catégorie
         val aggregatedExpenses = aggregateExpensesByCategory(expenses)
-        val pieChart: PieChart = view.findViewById(R.id.pie_chart)
-        pieChart.setData(aggregatedExpenses)
 
-        // Calcul de la somme des dépenses et du revenu restant
-        val totalExpenses = expenses.sumOf { it.price }
-        val remainingRevenue = initialRevenue - totalExpenses
-
-        val currentDate = getCurrentDate()
-        // Logique pour envoyer cette date à la base de données
-
+        // RecyclerView pour afficher les dépenses
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment= false)
 
+        // Définir l'adaptateur et gérer les clics
+        val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false)
+        adapter.setOnExpenseClickListener { expense ->
+            // Lorsque l'utilisateur clique sur une dépense, ouvrez le fragment d'édition
+            val fragment = EditExpenseFragment()
+            val bundle = Bundle()
+            bundle.putParcelable("expense", expense)
+            fragment.arguments = bundle
+
+            // Remplacer le fragment actuel par celui d'édition
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment) // Remplacer avec le conteneur approprié
+                .addToBackStack(null) // Ajouter à la pile arrière pour pouvoir revenir en arrière
+                .commit()
+        }
+
+        recyclerView.adapter = adapter
     }
 
+    // Fonction pour agréger les dépenses par catégorie
     private fun aggregateExpensesByCategory(expenses: List<Expense>): List<CategoryTotal> {
         return expenses
             .groupBy { it.category }
@@ -86,10 +76,13 @@ class HomeFragment : Fragment() {
             }
     }
 
-    private fun getCurrentDate(): String {
-        val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()) // Format de date exemple
-        return dateFormat.format(calendar.time) // Retourne la date actuelle sous forme de String
+    // Fonction pour charger les dépenses depuis un fichier JSON dans assets
+    private fun loadExpensesFromJson(context: Context, fileName: String): List<Expense> {
+        val inputStream = context.assets.open(fileName)
+        val reader = InputStreamReader(inputStream)
+        val gson = Gson()
+        val expensesType = object : TypeToken<List<Expense>>() {}.type
+        return gson.fromJson(reader, expensesType)
     }
-
 }
+

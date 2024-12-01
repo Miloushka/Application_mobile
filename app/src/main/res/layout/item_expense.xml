@@ -9,24 +9,36 @@
     app:cardCornerRadius="@dimen/cardview_default_radius"
     app:cardElevation="4dp">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="8dp"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textColor="@android:color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
         android:orientation="horizontal"
         android:padding="16dp">
+
 
         <ImageView
             android:id="@+id/category_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
             android:layout_marginEnd="16dp"
             app:tint="@android:color/white" />
-
 
         <TextView
             android:id="@+id/expense_title"
             android:layout_width="236dp"
             android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:autoSizeMaxTextSize="20sp"
             android:autoSizeMinTextSize="12sp"

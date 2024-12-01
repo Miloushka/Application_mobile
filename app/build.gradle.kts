@@ -49,6 +49,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    implementation ("com.google.code.gson:gson:2.8.8")
     implementation("androidx.room:room-runtime:2.5.0") // Runtime de Room
     kapt("androidx.room:room-compiler:2.5.0") // Pour la génération de code
     implementation("androidx.room:room-ktx:2.5.0") // Extensions Kotlin pour Room (si vous utilisez des coroutines)

@@ -1,0 +1,6 @@
+[
+  { "category": "Depense quotidienne", "price": 100.0 },
+  { "category": "Transport", "price": 50.0 },
+  { "category": "Loisir", "price": 200.0 },
+  { "category": "Maison", "price": 150.0 }
+]

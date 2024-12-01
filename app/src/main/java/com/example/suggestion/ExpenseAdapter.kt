@@ -1,7 +1,3 @@
-// Cet adaptateur RecyclerView est utilisé pour afficher les éléments de type `DisplayableItem`
-// dans différentes vues selon qu'il s'agit d'une vue home, mensuelle ou annuelle. Il gère l'affichage
-// des dépenses avec des icônes, des titres, des prix et des descriptions, et personnalise
-// l'apparence des cartes selon la catégorie.
 package com.example.suggestion
 
 import android.view.LayoutInflater
@@ -19,6 +15,12 @@ class ExpenseAdapter(
     private val isMonthFragment: Boolean
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
+    private var onExpenseClickListener: ((Expense) -> Unit)? = null
+
+    fun setOnExpenseClickListener(listener: (Expense) -> Unit) {
+        onExpenseClickListener = listener
+    }
+
     class ExpenseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val cardView: CardView = view.findViewById(R.id.expense_card)
         val title: TextView = view.findViewById(R.id.expense_title)
@@ -26,6 +28,7 @@ class ExpenseAdapter(
         val icon: ImageView = view.findViewById(R.id.category_icon)
         val description: TextView? = view.findViewById(R.id.expense_description)
         val detailPrice: TextView? = view.findViewById(R.id.expense_detail_price)
+        val date: TextView? = view.findViewById(R.id.date)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -62,7 +65,16 @@ class ExpenseAdapter(
                 if (item is Expense) {
                     holder.title.text = item.getDetails()
                     holder.price.text = item.getSubtitle()
+                    holder.date?.text = item.getDateExpense()
                 }
+            }
+        }
+
+        // Ajouter le gestionnaire de clic sur chaque carte de dépense
+        holder.cardView.setOnClickListener {
+            if (item is Expense) {
+                // Si un gestionnaire de clic est défini, invoquez-le avec l'élément de dépense
+                onExpenseClickListener?.invoke(item)
             }
         }
     }
