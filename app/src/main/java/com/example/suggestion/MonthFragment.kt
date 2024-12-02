@@ -1,5 +1,6 @@
 package com.example.suggestion
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -54,11 +55,17 @@ class MonthFragment : Fragment() {
         totalRevenueTextView.text = "Total Revenu : ${currencyFormat.format(totalRevenu)}"
         remainingBudgetTextView.text = "Reste à dépenser : ${currencyFormat.format(remainingBudget)}"
 
-        // Initialiser le PieChart et afficher les données consolidées
+        // Préparer les textes à afficher au centre du PieChart
+        val centerTexts = listOf(
+            "Dépenses: ${currencyFormat.format(totalDepenses)}" to Color.RED
+        )
+
+        // Configuration du PieChart
         val pieChart: PieChart = view.findViewById(R.id.pie_chart)
         pieChart?.let {
             val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.price) }
             it.setData(categoryTotals)
+            it.setCenterTexts(centerTexts) // Passer les textes au centre du PieChart
         }
 
         // Initialiser le RecyclerView et l'adaptateur
