@@ -1,5 +1,6 @@
 package com.example.suggestion
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,19 @@ class DatePickerFragment : Fragment() {
 
     // Indicateur si le mois doit être inclus ou non
     private var withMonth: Boolean = true
+
+    interface OnDateSelectedListener {
+        fun onDateSelected(year: Int, month: Int?)
+    }
+
+    private var listener: OnDateSelectedListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnDateSelectedListener) {
+            listener = context
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,19 +98,6 @@ class DatePickerFragment : Fragment() {
         }
     }
 
-    private fun updateSelectedDate() {
-        val selectedYear = yearSpinner.selectedItem as Int
-        val selectedMonth = monthSpinner.selectedItemPosition + 1 // Car les mois commencent à 0
-
-        if (withMonth) {
-            // Mise à jour de la TextView avec mois et année
-            selectedDateTextView.text = "Date sélectionnée : $selectedMonth/$selectedYear"
-        } else {
-            // Mise à jour de la TextView avec uniquement l'année
-            selectedDateTextView.text = "Date sélectionnée : $selectedYear"
-        }
-    }
-
     companion object {
         // Méthode pour créer une instance du fragment avec ou sans mois
         fun newInstance(withMonth: Boolean): DatePickerFragment {
@@ -113,5 +114,20 @@ class DatePickerFragment : Fragment() {
         // Récupérer l'argument pour afficher ou non le mois
         val withMonth = arguments?.getBoolean("withMonth") ?: true
         monthSpinner.visibility = if (withMonth) View.VISIBLE else View.GONE
+    }
+
+    private fun updateSelectedDate() {
+        val selectedYear = yearSpinner.selectedItem as Int
+        val selectedMonth = if (withMonth) monthSpinner.selectedItemPosition + 1 else null
+
+        // Notifier le fragment parent
+        listener?.onDateSelected(selectedYear, selectedMonth)
+
+        // Mettre à jour l'affichage de la date
+        selectedDateTextView.text = if (withMonth) {
+            "Date sélectionnée : $selectedMonth/$selectedYear"
+        } else {
+            "Date sélectionnée : $selectedYear"
+        }
     }
 }

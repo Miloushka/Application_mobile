@@ -3,23 +3,53 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side">
 
-    <FrameLayout
-        android:id="@+id/date_picker_container"
+    <!-- Section Date -->
+    <LinearLayout
+        android:id="@+id/date_selector_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    <Spinner
+        android:id="@+id/spinner_month"
+        android:layout_width="match_parent"
+        android:layout_height="61dp"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="48dp"
+        android:padding="8dp"
+        android:visibility="visible" />
+
+    <!-- Spinner pour l'année -->
+
+        <Spinner
+        android:id="@+id/spinner_year"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="48dp"
+        android:padding="8dp" />
+
+</LinearLayout>
 
     <TextView
         android:id="@+id/received_date_text"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="69dp"
+        android:layout_below="@id/spinner_year"
         android:gravity="center"
         android:padding="16dp"
-        android:layout_below="@id/date_picker_container"
         android:text="Sélectionner une date"
         android:textSize="18sp" />
 
@@ -29,30 +59,24 @@
         android:layout_marginBottom="16dp"
         android:elevation="4dp"
         android:padding="16dp">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/total_revenue_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Total Revenu: 0 €"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/remaining_budget_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Reste à dépenser: 0 €"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="8dp" />
-
-        </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/total_revenue_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Total Revenu: 0 €"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/remaining_budget_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Reste à dépenser: 0 €"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <com.example.suggestion.PieChart
         android:id="@+id/pie_chart"
