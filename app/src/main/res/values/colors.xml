@@ -14,6 +14,7 @@
     <color name="homeColor">#7979D9</color>  <!-- Lavande_canva pour Maison -->
     <color name="loisirColor">#12CADC</color>  <!-- turquoise_canva pour Loisir -->
     <color name="transportColor">#9B57CC</color> <!-- Violet_canva pour Loisir -->
+    <color name="incomeColor">#9B57CC</color>
     <color name="defaultColor">#B6F4FF</color><!-- Bleu_pastel_canva pour Loisir -->
 
 

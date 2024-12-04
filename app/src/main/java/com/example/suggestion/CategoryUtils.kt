@@ -11,7 +11,7 @@ object CategoryUtils {
             "transport" -> Pair(R.color.transportColor, R.drawable.ic_transport)
             "loisir" -> Pair(R.color.loisirColor, R.drawable.ic_loisir)
             "maison" -> Pair(R.color.homeColor, R.drawable.ic_home)
-            "revenu" -> Pair(R.color.homeColor, R.drawable.ic_home)
+            "revenu" -> Pair(R.color.incomeColor, R.drawable.ic_income)
             else -> Pair(R.color.defaultColor, R.drawable.ic_add)
         }
     }

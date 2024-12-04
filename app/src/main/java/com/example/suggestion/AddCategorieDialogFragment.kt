@@ -2,7 +2,6 @@ package com.example.suggestion
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,9 @@ import android.widget.*
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import androidx.room.Room
-import com.example.suggestion.data.AppDatabase
-import com.example.suggestion.data.Depense
-import com.example.suggestion.data.DepenseDao
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.ExpenseDao
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,10 +25,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     private lateinit var submitButton: Button
 
     // Room Database instances
-    private lateinit var db: AppDatabase
-    private lateinit var depenseDao: DepenseDao
+    private lateinit var db: DataBase
+    private lateinit var expenseDao: ExpenseDao
 
     private var selectedCategory: String = ""
+    private var userId: Int = 1
 
     // Callback pour informer HomeFragment que la dépense a été ajoutée
     var onDepenseAddedListener: (() -> Unit)? = null
@@ -42,9 +42,9 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
         db = Room.databaseBuilder(
             requireContext(),
-            AppDatabase::class.java, "app-database"
+            DataBase::class.java, "database"
         ).build()
-        depenseDao = db.depenseDao()
+        expenseDao = db.expenseDao()
 
         customSpinner = view.findViewById(R.id.customSpinner)
         customSpinner.onItemSelectedListener = this
@@ -54,9 +54,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         submitButton = view.findViewById(R.id.buttonSubmit)
 
         val customList = arrayListOf(
-            CategorieListItems("Dépenses quotidiennes", R.drawable.ic_shopping),
+            CategorieListItems("Dépense quotidienne", R.drawable.ic_shopping),
             CategorieListItems("Maison", R.drawable.ic_home),
-            CategorieListItems("Loisir", R.drawable.ic_loisir)
+            CategorieListItems("Loisir", R.drawable.ic_loisir),
+            CategorieListItems("Transport", R.drawable.ic_transport),
+            CategorieListItems("Revenu", R.drawable.ic_income)
         )
         val adapter = CustomAdapter(requireContext(), customList)
         customSpinner.adapter = adapter
@@ -76,8 +78,9 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 if (isValidDate(monthDepenseText)) {
                     val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
-                    val newDepense = Depense(
-                        id = generateNewId(),
+                    val newExpenseApp= ExpenseApp(
+                        userId = userId,
+                        expenseId = generateNewId(),
                         category = category,
                         price = priceCostText.toDouble(),
                         description = expenseDetailText,
@@ -85,7 +88,8 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
                     )
 
                     lifecycleScope.launch {
-                        insertDepenseToDatabase(newDepense)
+                        val newExpense = mapToExpense(newExpenseApp)
+                        insertDepenseToDatabase(newExpense)
                         Toast.makeText(context, "Dépense ajoutée avec succès", Toast.LENGTH_SHORT).show()
 
                         // Appeler le callback pour informer le fragment parent
@@ -141,7 +145,19 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         selectedCategory = "Autre"
     }
 
-    private suspend fun insertDepenseToDatabase(depense: Depense) {
-        depenseDao.insert(depense)
+    // Fonction de mappage de ExpenseApp vers Expense
+    private fun mapToExpense(expenseApp: ExpenseApp): Expense {
+        return Expense(
+            expenseId = expenseApp.expenseId,
+            userId = userId,
+            amount = expenseApp.price,
+            description = expenseApp.description,
+            date = expenseApp.date,
+            category = expenseApp.category
+        )
+    }
+
+    private suspend fun insertDepenseToDatabase(expense: Expense) {
+        expenseDao.insertExpense(expense)
     }
 }

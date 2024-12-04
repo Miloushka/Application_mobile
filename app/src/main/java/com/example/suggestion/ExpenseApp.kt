@@ -14,8 +14,9 @@ interface DisplayableItem {
     fun getDateExpense(): String
 }
 
-data class Expense(
-    val id: Int,
+data class ExpenseApp(
+    val userId: Int,
+    val expenseId: Int,
     var category: String,
     var price: Double,
     var description: String,
@@ -30,7 +31,7 @@ data class Expense(
 
     // Implémentation de la méthode writeToParcel pour rendre l'objet Parcelable
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(id)
+        parcel.writeInt(expenseId)
         parcel.writeString(category)
         parcel.writeDouble(price)
         parcel.writeString(description)
@@ -42,17 +43,18 @@ data class Expense(
         override fun describeContents(): Int = 0
 
         // Le CREATOR permet de recréer un objet Expense à partir d'un Parcel
-        companion object CREATOR : Parcelable.Creator<Expense> {
-            override fun createFromParcel(parcel: Parcel): Expense {
-                return Expense(
-                    id = parcel.readInt(),
+        companion object CREATOR : Parcelable.Creator<ExpenseApp> {
+            override fun createFromParcel(parcel: Parcel): ExpenseApp {
+                return ExpenseApp(
+                    userId = parcel.readInt(),
+                    expenseId = parcel.readInt(),
                     category = parcel.readString() ?: "",
                     price = parcel.readDouble(),
                     description = parcel.readString() ?: "",
                     date = parcel.readString() ?: ""
                 )
             }
-            override fun newArray(size: Int): Array<Expense?> {
+            override fun newArray(size: Int): Array<ExpenseApp?> {
                 return arrayOfNulls(size)
             }
         }
