@@ -18,10 +18,23 @@ class PieChart @JvmOverloads constructor(
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var data: List<CategoryTotal> = emptyList()
+    private val centerTexts = mutableListOf<Pair<String, Int>>() // Liste des textes avec couleurs
+
 
     fun setData(data: List<CategoryTotal>) {
-        this.data = data
+        // Filtrer les catégories pour exclure "revenu"
+        this.data = data.filter { it.getTitle().lowercase() != "revenu" }
         invalidate()
+    }
+
+    fun setCenterTexts(texts: List<Pair<String, Int>>) {
+        centerTexts.clear()
+        centerTexts.addAll(texts)
+        invalidate()
+    }
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = 48f // Taille du texte
+        textAlign = Paint.Align.CENTER // Centre le texte horizontalement
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -58,5 +71,16 @@ class PieChart @JvmOverloads constructor(
         val holeRadius = radius * 0.6f // Ajustez la taille du "trou"
         paint.color = Color.WHITE // Couleur du trou
         canvas.drawCircle(centerX, centerY, holeRadius, paint)
+
+        // Dessiner les textes au centre
+        val textSize = textPaint.textSize
+        val totalTextHeight = centerTexts.size * textSize + (centerTexts.size - 1) * textSize * 0.5f
+        var offsetY = centerY - totalTextHeight / 2 + textSize / 2
+
+        for ((text, color) in centerTexts) {
+            textPaint.color = color // Applique la couleur pour chaque texte
+            canvas.drawText(text, centerX, offsetY, textPaint)
+            offsetY += textSize * 1.5f // Espacement vertical entre les lignes
+        }
     }
 }

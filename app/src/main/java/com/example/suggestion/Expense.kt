@@ -67,3 +67,5 @@ data class CategoryTotal(
     override fun getDetails(): String = categoryName
     override fun getDateExpense(): String = ""
 }
+
+

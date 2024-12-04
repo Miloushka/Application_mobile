@@ -7,18 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.InputStreamReader
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
+import com.example.suggestion.data.AppDatabase
+import com.example.suggestion.data.Depense
+import kotlinx.coroutines.launch
+import androidx.room.Room
+import com.example.suggestion.data.DepenseDao
 
 class HomeFragment : Fragment() {
 
-    private val initialRevenue = 1200.0 // Revenu initial de la personne
+    private lateinit var db: AppDatabase
+    private lateinit var depenseDao: DepenseDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,59 +31,54 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Bouton pour ouvrir AddCategorieActivity
-        val addCategorieButton: ImageButton = view.findViewById(R.id.button_open_add_categorie)
-        addCategorieButton.setOnClickListener {
-            val dialog = AddCategorieDialogFragment()
-            dialog.show(parentFragmentManager, "AddCategorieDialogFragment")
-        }
+        db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "app-database"
+        ).build()
+        depenseDao = db.depenseDao()
 
-        // Charger les données depuis le fichier JSON
-        val expenses = loadExpensesFromJson(requireContext(), "expenses.json")
+        // Charger les données depuis la base de données de manière asynchrone
+        lifecycleScope.launch {
+            val expenses = loadExpensesFromDatabase()
+            // Configurer RecyclerView une fois les données chargées
+            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
+            recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Agréger les dépenses par catégorie
-        val aggregatedExpenses = aggregateExpensesByCategory(expenses)
+            // Initialiser l'adaptateur avec les dépenses
+            val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false)
 
-        // RecyclerView pour afficher les dépenses
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+            // Gérer le clic sur une dépense
+            adapter.setOnExpenseClickListener { expense ->
+                // Lorsque l'utilisateur clique sur une dépense, ouvrir le fragment d'édition
+                val fragment = EditExpenseFragment()
+                val bundle = Bundle()
+                bundle.putParcelable("expense", expense)
+                fragment.arguments = bundle
 
-        // Définir l'adaptateur et gérer les clics
-        val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false)
-        adapter.setOnExpenseClickListener { expense ->
-            // Lorsque l'utilisateur clique sur une dépense, ouvrez le fragment d'édition
-            val fragment = EditExpenseFragment()
-            val bundle = Bundle()
-            bundle.putParcelable("expense", expense)
-            fragment.arguments = bundle
-
-            // Remplacer le fragment actuel par celui d'édition
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment) // Remplacer avec le conteneur approprié
-                .addToBackStack(null) // Ajouter à la pile arrière pour pouvoir revenir en arrière
-                .commit()
-        }
-
-        recyclerView.adapter = adapter
-    }
-
-    // Fonction pour agréger les dépenses par catégorie
-    private fun aggregateExpensesByCategory(expenses: List<Expense>): List<CategoryTotal> {
-        return expenses
-            .groupBy { it.category }
-            .map { (category, expenseList) ->
-                val totalAmount = expenseList.sumOf { it.price }
-                CategoryTotal(category, totalAmount)
+                // Remplacer le fragment actuel par celui d'édition
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment) // Remplacer avec le conteneur approprié
+                    .addToBackStack(null) // Ajouter à la pile arrière pour pouvoir revenir en arrière
+                    .commit()
             }
+
+            // Définir l'adaptateur
+            recyclerView.adapter = adapter
+        }
     }
 
-    // Fonction pour charger les dépenses depuis un fichier JSON dans assets
-    private fun loadExpensesFromJson(context: Context, fileName: String): List<Expense> {
-        val inputStream = context.assets.open(fileName)
-        val reader = InputStreamReader(inputStream)
-        val gson = Gson()
-        val expensesType = object : TypeToken<List<Expense>>() {}.type
-        return gson.fromJson(reader, expensesType)
+    private suspend fun loadExpensesFromDatabase(): List<Expense> {
+        // Charger les dépenses depuis la base de données
+        val depenses = depenseDao.getAllDepenses()
+        // Mapper les résultats pour les utiliser dans la liste
+        return depenses.map {
+            Expense(
+                id = it.id,
+                category = it.category,
+                price = it.price,
+                description = it.description,
+                date = it.date
+            )
+        }
     }
 }
-
