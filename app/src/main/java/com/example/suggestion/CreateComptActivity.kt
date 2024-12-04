@@ -1,7 +1,12 @@
-package com.example.suggestion
-
 //Cette class gère la création de comptes utilisateurs
 // écrit par Aude et Jean-Guilhem
+
+// Cette activité gère la connexion des utilisateurs en vérifiant leurs identifiants.
+// Elle redirige vers l'activité principale (`MainActivity`) après une connexion réussie
+// ou affiche des messages d'erreur en cas d'échec. Elle propose également des options pour
+// créer un compte ou accéder directement à l'application.
+
+package com.example.suggestion
 
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +44,7 @@ class CreateComptActivity : AppCompatActivity() {
         val factory = UserViewModelFactory(userDao)
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
+        //         <!--Trouver le bouton et définir un listener pour le clic -->
 
         // Initialiser les vues
         email2 = findViewById(R.id.Email2)

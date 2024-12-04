@@ -1,3 +1,9 @@
+// Cette activité sert de point d'entrée pour l'application et contient un BottomNavigationView
+// pour permettre la navigation entre différents fragments (Home, Month, Annual, Account).
+// Elle charge un fragment par défaut (HomeFragment) et permet de naviguer vers d'autres fragments
+// à l'aide du menu de navigation. En outre, elle détecte les clics en dehors des EditText pour
+// masquer le clavier virtuel lorsque l'utilisateur interagit avec l'interface.
+
 package com.example.suggestion
 
 import android.content.Context
@@ -10,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+
 class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +27,6 @@ class MainActivity : AppCompatActivity(){
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
         val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
-
         // Configuration de la navigation par fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_home)
 
@@ -44,6 +50,7 @@ class MainActivity : AppCompatActivity(){
             true
         }
     }
+
 
     // Méthode pour configurer la détection de clic en dehors des EditTexts pour fermer le clavier
     private fun setupUI(view: View) {

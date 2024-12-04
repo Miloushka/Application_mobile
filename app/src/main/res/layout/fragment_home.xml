@@ -1,18 +1,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side">
+
 
     <!-- Bouton pour ouvrir AddCategorieActivity -->
     <ImageButton
         android:id="@+id/button_open_add_categorie"
-        android:layout_width="87dp"
-        android:layout_height="97dp"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="41dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="0dp"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="Ajouter catégorie"
         android:scaleType="fitCenter"
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button_open_add_categorie"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="0dp"
         android:clipToPadding="false"
         android:padding="8dp"
         android:scrollbars="vertical" />

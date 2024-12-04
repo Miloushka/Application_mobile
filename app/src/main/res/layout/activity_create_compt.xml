@@ -10,22 +10,30 @@
         android:id="@+id/bienvenue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:text="Bienvenue sur l'Application"
-
+        android:layout_marginTop="35dp"
+        android:text="@string/create_compte_message_intro"
         android:layout_centerHorizontal="true"
         android:textSize="24sp" />
-    <!--android:layout_centerInParent="true"-->
 
+    <ImageView
+        android:id="@+id/logo1"
+        android:layout_width="292dp"
+        android:layout_height="137dp"
+        android:layout_below="@id/bienvenue"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:src="@drawable/logo_evisual"
+
+        />
     <EditText
         android:id="@+id/Email2"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_below="@+id/bienvenue"
+        android:layout_below="@+id/logo1"
         android:paddingLeft="10dp"
         android:inputType="textEmailAddress"
-        android:hint="exemple@gmail.com"
-        android:layout_marginTop="100dp"
+        android:hint="@string/create_compte_page_mail"
+        android:layout_marginTop="35dp"
         android:layout_marginHorizontal="10dp"
         android:background="@color/white"/>
 
@@ -37,7 +45,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="25dp"
         android:background="@color/white"
-        android:hint="mot de passe"
+        android:hint="@string/create_compte_page_mot_de_passe"
         android:inputType="textPassword"
         android:paddingLeft="10dp" />
     <EditText
@@ -47,12 +55,10 @@
         android:layout_below="@+id/Motdepasse2"
         android:paddingLeft="10dp"
         android:inputType="textPassword"
-        android:hint="Confirmation mot de passe"
+        android:hint="@string/create_compte_page_confirmation_mot_de_passe"
         android:layout_marginTop="25dp"
         android:layout_marginHorizontal="10dp"
         android:background="@color/white"/>
-
-
 
 
 
@@ -61,15 +67,15 @@
         android:layout_width="200dp"
         android:layout_below="@id/Motdepasse3"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:text="Se connecter"
+        android:layout_marginTop="40dp"
+        android:text="@string/create_compte_button_connextion"
         android:backgroundTint="@color/violet_canva"
         android:layout_height="48dp"
         />
     <TextView
         android:id="@+id/besoin_d_aide"
         android:textStyle="bold"
-        android:text="Besoin d'aide ?"
+        android:text="@string/create_compte_besoin_aide"
         android:layout_below="@id/seConnecter2"
         android:layout_marginTop="25dp"
         android:layout_centerHorizontal="true"
