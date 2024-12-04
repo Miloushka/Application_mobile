@@ -6,11 +6,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 // Permet de créer et de configurer la base de donnée SQLite
+// écrit par Jean-Guilhem
 
-@Database(entities = [User::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Expense::class], version = 1, exportSchema = false)
 abstract class DataBase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
+    abstract fun expenseDao(): ExpenseDao
 
     companion object{
         @Volatile

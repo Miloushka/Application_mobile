@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 
 // permet à l'utilisateur d'accéder à plusieurs source de donnée
 // recommandé pour les bonnes pratiques d'architectures
+//écrit par Jean-Guilhem
 
 class UserRepositoty(private val userDao: UserDao) {
 
