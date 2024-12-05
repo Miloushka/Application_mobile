@@ -70,6 +70,12 @@ class CreateComptActivity : AppCompatActivity() {
             txtEmail2.trim().isEmpty() || txtPassword2.trim().isEmpty() || txtPassword3.trim().isEmpty() -> {
                 showError("Vous devez remplir tous les champs !")
             }
+            !isValidEmail(txtEmail2) -> { // Vérification de l'email
+                showError("Adresse email invalide ! Elle doit se terminer par @gmail.com, @orange.fr ou @esme.fr.")
+            }
+            txtPassword2.length < 8 -> { // Vérification de la longueur du mot de passe
+                showError("Le mot de passe doit contenir au moins 8 caractères.")
+            }
             txtPassword2 != txtPassword3 -> {
                 showError("Les mots de passe ne correspondent pas !")
             }
@@ -88,6 +94,11 @@ class CreateComptActivity : AppCompatActivity() {
                 )
             }
         }
+    }
+    private fun isValidEmail(email: String): Boolean {
+        // Expression régulière pour vérifier les domaines autorisés
+        val regex = Regex("^[A-Za-z0-9._%+-]+@(gmail\\.com|orange\\.fr|esme\\.fr)$")
+        return regex.matches(email)
     }
 
     private fun showError(message: String) {
