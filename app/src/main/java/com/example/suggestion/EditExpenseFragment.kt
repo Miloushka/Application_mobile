@@ -94,7 +94,7 @@ class EditExpenseFragment : Fragment() {
         //TODO("Relier le bouton save a la base de donnée")
         // Sauvegarder les modifications
         val saveButton: Button = view.findViewById(R.id.save_button)
-                saveButton.setOnClickListener {
+        saveButton.setOnClickListener {
             val updatedCategory = customSpinner.selectedItem.toString()
             val updatedDescription = expenseDetail.text.toString()
             val updatedPrice = priceCost.text.toString().toDouble()
