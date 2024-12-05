@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 // Permet de créer et de configurer la base de donnée SQLite
 // écrit par Jean-Guilhem
 
-@Database(entities = [User::class, Expense::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Expense::class], version = 3, exportSchema = false)
 abstract class DataBase: RoomDatabase() {
 
     abstract fun userDao(): UserDao
@@ -28,7 +28,9 @@ abstract class DataBase: RoomDatabase() {
                     context.applicationContext,
                     DataBase::class.java,
                     "database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 return instance
             }
