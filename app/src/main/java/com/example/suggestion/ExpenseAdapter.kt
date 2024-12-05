@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ExpenseAdapter(
     private val items: List<DisplayableItem>,
@@ -15,9 +17,9 @@ class ExpenseAdapter(
     private val isMonthFragment: Boolean
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
-    private var onExpenseClickListener: ((Expense) -> Unit)? = null
+    private var onExpenseClickListener: ((ExpenseApp) -> Unit)? = null
 
-    fun setOnExpenseClickListener(listener: (Expense) -> Unit) {
+    fun setOnExpenseClickListener(listener: (ExpenseApp) -> Unit) {
         onExpenseClickListener = listener
     }
 
@@ -51,7 +53,7 @@ class ExpenseAdapter(
         holder.icon.setImageResource(icon)
 
         if (isMonthFragment) {
-            if (item is Expense) {
+            if (item is ExpenseApp) {
                 holder.title.text = item.getTitle()
                 holder.price.text = item.getSubtitle()
                 holder.description?.text = item.getDetails()
@@ -62,22 +64,35 @@ class ExpenseAdapter(
                 holder.title.text = item.getTitle()
                 holder.price.text = item.getSubtitle()
             } else {
-                if (item is Expense) {
+                if (item is ExpenseApp) {
                     holder.title.text = item.getDetails()
                     holder.price.text = item.getSubtitle()
-                    holder.date?.text = item.getDateExpense()
+                    holder.date?.text = formatDate(item.getDateExpense())
                 }
             }
         }
 
         // Ajouter le gestionnaire de clic sur chaque carte de dépense
         holder.cardView.setOnClickListener {
-            if (item is Expense) {
+            if (item is ExpenseApp) {
                 // Si un gestionnaire de clic est défini, invoquez-le avec l'élément de dépense
                 onExpenseClickListener?.invoke(item)
             }
         }
     }
 
+    // Fonction pour formater la date
+    private fun formatDate(rawDate: String?): String {
+        if (rawDate.isNullOrEmpty()) return ""
+
+        return try {
+            val inputFormat = SimpleDateFormat("yyyyMMdd", Locale.FRANCE)
+            val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
+            val parsedDate = inputFormat.parse(rawDate)
+            outputFormat.format(parsedDate!!)
+        } catch (e: Exception) {
+            rawDate // Retourner la date brute en cas d'erreur
+        }
+    }
     override fun getItemCount(): Int = items.size
 }

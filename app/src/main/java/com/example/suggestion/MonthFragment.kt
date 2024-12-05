@@ -72,19 +72,19 @@ class MonthFragment : Fragment() {
     }
 
     // Fonction pour charger les dépenses à partir du fichier JSON dans assets
-    private fun loadExpensesFromAssets(): List<Expense> {
+    private fun loadExpensesFromAssets(): List<ExpenseApp> {
         val assetManager = context?.assets
         val inputStream = assetManager?.open("expenses.json") // Ouvrir le fichier JSON dans assets
         val reader = InputStreamReader(inputStream)
         val gson = Gson()
 
         // Utilise Gson pour parser le JSON
-        val expenseListType = object : TypeToken<List<Expense>>() {}.type
+        val expenseListType = object : TypeToken<List<ExpenseApp>>() {}.type
         return gson.fromJson(reader, expenseListType)
     }
 
     // Méthode pour filtrer les dépenses par date
-    private fun filterExpensesByDate(expenses: List<Expense>) {
+    private fun filterExpensesByDate(expenses: List<ExpenseApp>) {
         val selectedMonth = monthSpinner.selectedItemPosition + 1
         val selectedYear = yearSpinner.selectedItem as Int
 
@@ -134,10 +134,31 @@ class MonthFragment : Fragment() {
         // Initialiser le RecyclerView et l'adaptateur
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isMonthFragment = true, isAnnualView = false)
+
+        // Créer le message dynamique en fonction de la date
+        val monthNames = listOf(
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        )
+
+        val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
+        val message = "Aucune dépense trouvée pour ${monthNames[selectedMonth - 1]} $selectedYear."
+
+        // Vérifier si la liste des dépenses filtrées est vide et afficher un message
+        if (filteredExpenses.isEmpty()) {
+            // Aucune dépense trouvée, afficher le message
+            noExpensesMessage.text = message  // Mettre à jour le texte dynamique
+            noExpensesMessage.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            // Des dépenses sont trouvées, masquer le message et afficher le RecyclerView
+            noExpensesMessage.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
     }
 
     // Méthode pour consolider les dépenses par catégorie
-    private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
+    private fun consolidateExpenses(expenses: List<ExpenseApp>): List<ExpenseApp> {
         val groupedExpenses = expenses.groupBy { it.category }
 
         return groupedExpenses.map { (category, categoryExpenses) ->
@@ -146,9 +167,12 @@ class MonthFragment : Fragment() {
             val descriptionWithPrices = categoryExpenses.map { "${it.price}€" }
             val descriptionWithPricesStr = descriptionWithPrices.joinToString(separator = "\n")
 
+
+            TODO("Modifier le user ID")
             // Utilisation d'un ID généré pour chaque dépense consolidée
-            Expense(
-                id = category.hashCode(), // Génère un ID unique basé sur la catégorie
+            ExpenseApp(
+                userId = 1,
+                expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
                 category = category,
                 price = totalPrice,
                 description = concatenatedDescriptions,

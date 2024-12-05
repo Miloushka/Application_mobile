@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AnnualFragment : Fragment() {
-
+//TODO("relier a la base de donnée")
     private lateinit var yearSpinner: Spinner
 
     override fun onCreateView(
@@ -80,6 +81,25 @@ class AnnualFragment : Fragment() {
 
                 // Mettre à jour le RecyclerView avec les dépenses filtrées
                 recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
+
+                // Mettre à jour le RecyclerView avec les dépenses filtrées
+                recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
+
+                // Affichage dynamique du message "Aucune dépense trouvée"
+                val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
+                val yearMessage = "Aucune dépense trouvée pour $selectedYear."
+
+                if (filteredExpenses.isEmpty()) {
+                    // Si aucune dépense n'est trouvée, afficher le message
+                    noExpensesMessage.text = yearMessage  // Mettre à jour le texte avec l'année sélectionnée
+                    noExpensesMessage.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
+                } else {
+                    // Si des dépenses sont trouvées, masquer le message et afficher le RecyclerView
+                    noExpensesMessage.visibility = View.GONE
+                    recyclerView.visibility = View.VISIBLE
+                }
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -87,19 +107,19 @@ class AnnualFragment : Fragment() {
     }
 
     // Fonction pour charger les dépenses à partir du fichier JSON dans assets
-    private fun loadExpensesFromAssets(): List<Expense> {
+    private fun loadExpensesFromAssets(): List<ExpenseApp> {
         val assetManager = context?.assets
         val inputStream = assetManager?.open("expenses.json") // Ouvrir le fichier JSON dans assets
         val reader = InputStreamReader(inputStream)
         val gson = Gson()
 
         // Utilisation de Gson pour parser le JSON
-        val expenseListType = object : TypeToken<List<Expense>>() {}.type
+        val expenseListType = object : TypeToken<List<ExpenseApp>>() {}.type
         return gson.fromJson(reader, expenseListType)
     }
 
     // Méthode pour consolider les dépenses par catégorie
-    private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
+    private fun consolidateExpenses(expenses: List<ExpenseApp>): List<ExpenseApp> {
         val groupedExpenses = expenses.groupBy { it.category }
 
         return groupedExpenses.map { (category, categoryExpenses) ->
@@ -109,9 +129,11 @@ class AnnualFragment : Fragment() {
             // Concatène les descriptions des dépenses dans chaque catégorie
             val concatenatedDescriptions = categoryExpenses.joinToString(separator = "\n") { it.description }
 
+            TODO("Modifier le user ID")
             // Crée une nouvelle dépense consolidée pour chaque catégorie
-            Expense(
-                id = category.hashCode(), // Génère un ID unique basé sur la catégorie
+            ExpenseApp(
+                userId = 1,
+                expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
                 category = category,
                 price = totalPrice,
                 description = concatenatedDescriptions,
