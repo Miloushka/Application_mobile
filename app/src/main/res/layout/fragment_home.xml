@@ -5,19 +5,11 @@
     android:layout_marginRight="@dimen/default_margin_side">
 
 
-    <com.example.suggestion.PieChart
-        android:id="@+id/pie_chart"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="50dp" />
-
-
     <!-- Bouton pour ouvrir AddCategorieActivity -->
     <ImageButton
         android:id="@+id/button_open_add_categorie"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_below="@id/pie_chart"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"

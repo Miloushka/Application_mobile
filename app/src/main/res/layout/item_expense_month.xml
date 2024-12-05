@@ -12,11 +12,14 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Premier LinearLayout pour le titre et le prix -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="1">
 
+            <!-- Icone de la catégorie -->
             <FrameLayout
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -47,24 +50,28 @@
                 </androidx.cardview.widget.CardView>
             </FrameLayout>
 
+            <!-- Titre de la catégorie -->
             <TextView
                 android:id="@+id/expense_title"
-                android:layout_width="0dp"
+                android:layout_width="29dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="0.7"
                 android:gravity="center_vertical"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
+            <!-- Prix total -->
             <TextView
                 android:id="@+id/expense_price"
-                android:layout_width="25dp"
+                android:layout_width="80dp"
                 android:layout_height="match_parent"
-                android:gravity="center_vertical"
+                android:layout_weight="0.3"
+                android:gravity="center_vertical|end"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
 
+        <!-- Deuxième LinearLayout pour la description et le prix détaillé -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,6 +91,12 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
+            <Button
+                android:id="@+id/edit_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

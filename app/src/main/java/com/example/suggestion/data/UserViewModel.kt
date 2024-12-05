@@ -1,28 +1,42 @@
 package com.example.suggestion.data
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
+// Donne les données à l'interface utilisateur et applique les changements de configurations
+// le ViewModel est fait pour encapsuler la logique d'accès à la base de données
+// écrit par Jean-Guilhem
+
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-// Donne les données à l'interface utilisateur et applique les changements de configurations
+class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
-class UserViewModel(application: Application): AndroidViewModel(application) {
+    var currentUser: User? = null
 
-    private val readAllData: LiveData<List<User>>
-    private val repository: UserRepositoty
-
-    init {
-        val userDao = DataBase.getDatabase(application).userDao()
-        repository = UserRepositoty(userDao)
-        readAllData = repository.readAllData
+    // Permet de créer un utilisateur
+    fun createUser(password: String, email: String, onSuccess: (User) -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            val existingUser = userDao.getUserByEmail(email)
+            if (existingUser != null) {
+                onError("Un utilisateur avec cet email existe déjà.")
+            } else {
+                val userId = userDao.addUser(User(0, email, password))
+                currentUser = User(userId, email, password)
+                onSuccess(currentUser!!)
+            }
+        }
     }
 
-    fun addUser(user: User){
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.addUser(user) }
+    // fonction permmettant de se connecter
+    fun login(email: String, password: String, onSuccess: (User) -> Unit, onError: (String) -> Unit) {
+        viewModelScope.launch {
+            val user = userDao.getUserByEmail(email)
+            if (user != null) {
+                if(password == user.password){
+                currentUser = user
+                onSuccess(user)
+            }} else {
+                onError("Email incorrect.")
+            }
+        }
     }
 }

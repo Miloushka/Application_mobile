@@ -3,50 +3,93 @@
 // ou affiche des messages d'erreur en cas d'échec. Elle propose également des options pour
 // créer un compte ou accéder directement à l'application.
 
-package com.example.suggestion;
+package com.example.suggestion
+
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.UserViewModel
+import com.example.suggestion.data.UserViewModelFactory
 
 class CreateComptActivity : AppCompatActivity() {
-override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState,)
+
+    private lateinit var email2: EditText
+    private lateinit var password2: EditText
+    private lateinit var password3: EditText
+    private lateinit var buttonSeconnecter2: Button
+    private lateinit var error2: TextView
+
+    private lateinit var userViewModel: UserViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_compt)
 
-        val email2 = findViewById<EditText>(R.id.Email2)
-        val password2 = findViewById<EditText>(R.id.Motdepasse2)
-        val password3 = findViewById<EditText>(R.id.Motdepasse3)
-        val buttonSeconnecter2 = findViewById<Button>(R.id.seConnecter2)
-        val error2 = findViewById<TextView>(R.id.error2)
+        // Obtenir une instance de la base de données
+        val database = DataBase.getDatabase(this)
+        val userDao = database.userDao()
+
+        // Initialiser le ViewModel avec le UserViewModelFactory
+        val factory = UserViewModelFactory(userDao)
+        userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
         //         <!--Trouver le bouton et définir un listener pour le clic -->
 
+        // Initialiser les vues
+        email2 = findViewById(R.id.Email2)
+        password2 = findViewById(R.id.Motdepasse2)
+        password3 = findViewById(R.id.Motdepasse3)
+        buttonSeconnecter2 = findViewById(R.id.seConnecter2)
+        error2 = findViewById(R.id.error2)
+
+        // Définir l'écouteur sur le bouton
         buttonSeconnecter2.setOnClickListener {
+            validateAndCreateUser()
+        }
+    }
 
-            error2.visibility = View.GONE
+    private fun validateAndCreateUser() {
+        error2.visibility = View.GONE
 
-            val txtEmail2 = email2.text.toString()
-            val txtPassword2 = password2.text.toString()
-            val txtPassword3 = password3.text.toString()
-            if (txtEmail2.trim().isEmpty() || txtPassword2.trim().isEmpty() || txtPassword3.trim().isEmpty()) {
-                error2.text = "vous devez remplir tout les champs !"
-            
-                error2.visibility = View.VISIBLE
-            } else if (txtPassword2 != txtPassword3) {
-                // Vérifier si les mots de passe correspondent
-                error2.text = "Les mots de passe ne correspondent pas !"
-                error2.visibility = View.VISIBLE
-            } else {
-                // Si tout est correct, rediriger vers MainActivity
-                val intent = Intent(this, ConnectionActivity::class.java)
-                startActivity(intent)
-                finish()
+        val txtEmail2 = email2.text.toString()
+        val txtPassword2 = password2.text.toString()
+        val txtPassword3 = password3.text.toString()
+
+        when {
+            txtEmail2.trim().isEmpty() || txtPassword2.trim().isEmpty() || txtPassword3.trim().isEmpty() -> {
+                showError("Vous devez remplir tous les champs !")
+            }
+            txtPassword2 != txtPassword3 -> {
+                showError("Les mots de passe ne correspondent pas !")
+            }
+            else -> {
+                userViewModel.createUser(
+                    password = txtPassword2,
+                    email = txtEmail2,
+                    onSuccess = { user ->
+                        Toast.makeText(this, "Inscription réussie ! Bienvenue, ${user.email}", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    },
+                    onError = { message ->
+                        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
         }
+    }
+
+    private fun showError(message: String) {
+        error2.text = message
+        error2.visibility = View.VISIBLE
     }
 }
 

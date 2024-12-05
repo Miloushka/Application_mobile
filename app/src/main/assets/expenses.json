@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1,
+    "category": "Depense quotidienne",
+    "price": 12.50,
+    "description": "Lunch at a restaurant lundi",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 2,
+    "category": "Transport",
+    "price": 3.00,
+    "description": "Bus ticket",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 52,
+    "category": "Transport",
+    "price": 3.00,
+    "description": "Bus ticket",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 32,
+    "category": "Revenu",
+    "price": 1500,
+    "description": "Salaire",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 3,
+    "category": "Loisir",
+    "price": 45.00,
+    "description": "New shoes",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 4,
+    "category": "Maison",
+    "price": 15.00,
+    "description": "Movie night",
+    "date": "2024-11-16"
+  },
+  {
+    "id": 5,
+    "category": "Depense quotidienne",
+    "price": 12.50,
+    "description": "Lunch at a restaurant mardi",
+    "date": "2024-11-16"
+  }
+]

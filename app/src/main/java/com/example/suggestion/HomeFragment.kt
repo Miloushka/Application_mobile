@@ -1,93 +1,84 @@
-// Ce fragment affiche l'écran principal de l'application avec une liste de dépenses.
-// Il permet également d'ouvrir un dialogue pour ajouter une nouvelle catégorie de dépense.
-// Les dépenses sont agrégées par catégorie et affichées sous forme de graphique circulaire
-// et d'une liste recyclée. Le fragment gère l'ajout de catégories via un dialogue et la mise
-// à jour de la vue en fonction des données des dépenses.
-
 package com.example.suggestion
 
-import android.graphics.Color
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.example.suggestion.data.AppDatabase
+import com.example.suggestion.data.Depense
+import kotlinx.coroutines.launch
+import androidx.room.Room
+import com.example.suggestion.data.DepenseDao
 
 class HomeFragment : Fragment() {
 
-    private val initialRevenue = 1200.0 // Revenu initial de la personne
+    private lateinit var db: AppDatabase
+    private lateinit var depenseDao: DepenseDao
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        // Gonfler le layout pour ce fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Bouton pour ouvrir AddCategorieActivity
-        val addCategorieButton: ImageButton = view.findViewById(R.id.button_open_add_categorie)
-        addCategorieButton.setOnClickListener {
-            val dialog = AddCategorieDialogFragment()
-            dialog.show(requireFragmentManager(), "AddCategorieDialogFragment")
-        }
+        db = Room.databaseBuilder(
+            requireContext(),
+            AppDatabase::class.java, "app-database"
+        ).build()
+        depenseDao = db.depenseDao()
 
-        // Liste d'exemples de dépenses
-        val expenses = listOf(
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000),
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000),
-            Expense("Depense quotidienne", 12.50, "Lunch at a restaurant", 1699954800000),
-            Expense("Transport", 3.00, "Bus ticket", 1699958400000),
-            Expense("Loisir", 45.00, "New shoes", 1699962000000),
-            Expense("Maison", 15.00, "Movie night", 1699965600000)
-        )
+        // Charger les données depuis la base de données de manière asynchrone
+        lifecycleScope.launch {
+            val expenses = loadExpensesFromDatabase()
+            // Configurer RecyclerView une fois les données chargées
+            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
+            recyclerView.layoutManager = LinearLayoutManager(context)
 
-        val aggregatedExpenses = aggregateExpensesByCategory(expenses)
-        val pieChart: PieChart = view.findViewById(R.id.pie_chart)
-        pieChart.setData(aggregatedExpenses)
+            // Initialiser l'adaptateur avec les dépenses
+            val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false)
 
-        // Calcul de la somme des dépenses et du revenu restant
-        val totalExpenses = expenses.sumOf { it.price }
-        val remainingRevenue = initialRevenue - totalExpenses
+            // Gérer le clic sur une dépense
+            adapter.setOnExpenseClickListener { expense ->
+                // Lorsque l'utilisateur clique sur une dépense, ouvrir le fragment d'édition
+                val fragment = EditExpenseFragment()
+                val bundle = Bundle()
+                bundle.putParcelable("expense", expense)
+                fragment.arguments = bundle
 
-        // Ajouter les textes au centre du diagramme
-        pieChart.setCenterTexts(
-            listOf(
-                Pair("${totalExpenses} €", Color.RED),       // Dépenses en rouge
-                Pair("${remainingRevenue} €", Color.GREEN)  // Revenu restant en vert
-            )
-        )
-
-        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment= false)
-
-
-
-    }
-
-    private fun aggregateExpensesByCategory(expenses: List<Expense>): List<CategoryTotal> {
-        return expenses
-            .groupBy { it.category }
-            .map { (category, expenseList) ->
-                val totalAmount = expenseList.sumOf { it.price }
-                CategoryTotal(category, totalAmount)
+                // Remplacer le fragment actuel par celui d'édition
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment) // Remplacer avec le conteneur approprié
+                    .addToBackStack(null) // Ajouter à la pile arrière pour pouvoir revenir en arrière
+                    .commit()
             }
+
+            // Définir l'adaptateur
+            recyclerView.adapter = adapter
+        }
     }
 
+    private suspend fun loadExpensesFromDatabase(): List<Expense> {
+        // Charger les dépenses depuis la base de données
+        val depenses = depenseDao.getAllDepenses()
+        // Mapper les résultats pour les utiliser dans la liste
+        return depenses.map {
+            Expense(
+                id = it.id,
+                category = it.category,
+                price = it.price,
+                description = it.description,
+                date = it.date
+            )
+        }
+    }
 }

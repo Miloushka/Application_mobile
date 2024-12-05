@@ -7,13 +7,20 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 //Contient toutes les methodes pour manipuler la base de donnée
+//écrit par Jean-Guilhem
 
 @Dao
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addUser(user: User)
+    suspend fun addUser(user: User): Long
 
-    @Query(value = "SELECT * FROM users ORDER BY id ASC")
+    @Query(value = "SELECT * FROM users ORDER BY userId ASC")
     fun readAllData(): LiveData<List<User>>
+
+    @Query("SELECT * FROM users WHERE email = :email LIMIT 1")
+    suspend fun getUserByEmail(email: String): User?
+
+    @Query("SELECT * FROM users WHERE userId = :userId LIMIT 1")
+    suspend fun getUserById(userId: Int): User?
 }
