@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_below="@id/confirmNewPasswd"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side"
@@ -12,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:spinnerMode="dropdown" />
+        android:spinnerMode="dropdown"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
     <!-- EditText (champ de saisie) -->
     <EditText

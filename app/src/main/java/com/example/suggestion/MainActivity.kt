@@ -1,9 +1,3 @@
-// Cette activité sert de point d'entrée pour l'application et contient un BottomNavigationView
-// pour permettre la navigation entre différents fragments (Home, Month, Annual, Account).
-// Elle charge un fragment par défaut (HomeFragment) et permet de naviguer vers d'autres fragments
-// à l'aide du menu de navigation. En outre, elle détecte les clics en dehors des EditText pour
-// masquer le clavier virtuel lorsque l'utilisateur interagit avec l'interface.
-
 package com.example.suggestion
 
 import android.content.Context
@@ -16,8 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(),
+    EditExpenseFragment.OnExpenseUpdatedListener,
+    HomeFragment.OnExpenseDeletedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +22,7 @@ class MainActivity : AppCompatActivity(){
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
         val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
+
         // Configuration de la navigation par fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_home)
 
@@ -51,6 +47,18 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    override fun onExpenseDeleted() {
+        val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragment") as? HomeFragment
+        homeFragment?.refreshExpenses()
+    }
+
+    // Implémentation de la méthode de l'interface OnExpenseUpdatedListener
+    override fun onExpenseUpdated() {
+        // Cette méthode est appelée lorsque les informations d'une dépense sont mises à jour
+        // Vous pouvez mettre à jour la liste des dépenses dans HomeFragment
+        val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragment") as? HomeFragment
+        homeFragment?.refreshExpenses() // Appeler la méthode publique refreshExpenses pour recharger les dépenses
+    }
 
     // Méthode pour configurer la détection de clic en dehors des EditTexts pour fermer le clavier
     private fun setupUI(view: View) {
@@ -78,10 +86,10 @@ class MainActivity : AppCompatActivity(){
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
-        private fun loadFragment(fragment: Fragment) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .commit()
 
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }

@@ -27,6 +27,18 @@
         android:layout_below="@id/pie_chart"
         android:scrollbars="vertical" />
 
+    <TextView
+        android:id="@+id/no_expenses_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18sp"
+        android:textColor="@android:color/black"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+
 
 
 </LinearLayout>
