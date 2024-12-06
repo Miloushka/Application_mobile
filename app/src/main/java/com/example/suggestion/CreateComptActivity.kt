@@ -68,16 +68,16 @@ class CreateComptActivity : AppCompatActivity() {
 
         when {
             txtEmail2.trim().isEmpty() || txtPassword2.trim().isEmpty() || txtPassword3.trim().isEmpty() -> {
-                showError("Vous devez remplir tous les champs !")
+                showError(getString(R.string.error_empty_fields))
             }
             !isValidEmail(txtEmail2) -> { // Vérification de l'email
-                showError("Adresse email invalide ! Elle doit se terminer par @gmail.com, @orange.fr ou @esme.fr.")
+                showError(getString(R.string.error_invalid_email))
             }
             txtPassword2.length < 8 -> { // Vérification de la longueur du mot de passe
-                showError("Le mot de passe doit contenir au moins 8 caractères.")
+                showError(getString(R.string.error_short_password))
             }
             txtPassword2 != txtPassword3 -> {
-                showError("Les mots de passe ne correspondent pas !")
+                showError(getString(R.string.error_password_mismatch))
             }
             else -> {
                 userViewModel.createUser(
@@ -98,6 +98,8 @@ class CreateComptActivity : AppCompatActivity() {
     private fun isValidEmail(email: String): Boolean {
         // Expression régulière pour vérifier les domaines autorisés
         val regex = Regex("^[A-Za-z0-9._%+-]+@(gmail\\.com|orange\\.fr|esme\\.fr)$")
+        // Expression régulière stricte pour valider un e-mail selon les règles RFC 5322
+        //val regex = Regex("^(?=.{1,256}$)(?=.{1,64}@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
         return regex.matches(email)
     }
 

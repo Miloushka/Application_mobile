@@ -72,4 +72,40 @@
     <string name="create_compte_besoin_aide">Besoin d\'aide ?</string>
 
 
+    <!-- Page AddCategorieDialogFragment-->
+    <string name="Category_Dépense_quotidienne">Dépense quotidienne</string>
+    <string name="Category_Maison">Maison</string>
+    <string name="Category_Loisir">Loisir</string>
+    <string name="Category_Transport">Transport</string>
+    <string name="Category_Revenu">Revenu</string>
+    <string name="date_selected">Date sélectionnée : %1$s</string>
+    <string name="success_add_expense">Dépense ajoutée avec succès</string>
+    <string name="invalid_date">Date invalide. Utilisez le format AAAA-MM-JJ</string>
+    <string name="fill_all_fields">Veuillez remplir tous les champs</string>
+    <string name="other">Autre</string>
+    <string name="no_expenses_message">Aucune dépense trouvée pour %1$d.</string>
+    <string name="category_daily_expense">depense quotidienne</string>
+    <string name="category_transport">transport</string>
+    <string name="category_leisure">loisir</string>
+    <string name="category_home">maison</string>
+    <string name="category_income">revenu</string>
+    <string name="category_default">autre</string>
+    <string name="login_success_message">Connexion réussie ! Bienvenue, %1$s</string>
+    <string name="confirm_delete_title">Confirmation</string>
+    <string name="confirm_delete_message">Voulez-vous vraiment supprimer cette dépense ?</string>
+    <string name="confirm_delete_positive">Oui</string>
+    <string name="confirm_delete_negative">Non</string>
+    <string name="error_invalid_date_format">Format de date invalide</string>
+    <string name="descrption">Description</string>
+    <string name="add_category">Ajouter catégorie</string>
+    <string name="no_expense_found">Aucune dépense trouvée. Veuillez en ajouter une.</string>
+    <string name="select_date">Sélectionner une date</string>
+    <string name="total_revenue">Total Revenu : %1$s</string>
+    <string name="remaining_budget">Reste à dépenser : %1$s</string>
+    <string name="account_select_birth_date">Anniversaire sélectionné : %1$s</string>
+    <string name="error_empty_fields">Vous devez remplir tous les champs !</string>
+    <string name="error_invalid_email">Adresse email invalide ! Elle doit se terminer par @gmail.com, @orange.fr ou @esme.fr.</string>
+    <string name="error_short_password">Le mot de passe doit contenir au moins 8 caractères.</string>
+    <string name="error_password_mismatch">Les mots de passe ne correspondent pas !</string>
+    <string name="signup_success">Inscription réussie ! Bienvenue, %1$s</string>
 </resources>

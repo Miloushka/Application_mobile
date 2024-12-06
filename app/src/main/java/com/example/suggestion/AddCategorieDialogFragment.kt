@@ -54,11 +54,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         submitButton = view.findViewById(R.id.buttonSubmit)
 
         val customList = arrayListOf(
-            CategorieListItems("Dépense quotidienne", R.drawable.ic_shopping),
-            CategorieListItems("Maison", R.drawable.ic_home),
-            CategorieListItems("Loisir", R.drawable.ic_loisir),
-            CategorieListItems("Transport", R.drawable.ic_transport),
-            CategorieListItems("Revenu", R.drawable.ic_income)
+            CategorieListItems(getString(R.string.Category_Dépense_quotidienne), R.drawable.ic_shopping),
+            CategorieListItems(getString(R.string.Category_Maison), R.drawable.ic_home),
+            CategorieListItems(getString(R.string.Category_Loisir), R.drawable.ic_loisir),
+            CategorieListItems(getString(R.string.Category_Transport), R.drawable.ic_transport),
+            CategorieListItems(getString(R.string.Category_Revenu), R.drawable.ic_income)
         )
         val adapter = CustomAdapter(requireContext(), customList)
         customSpinner.adapter = adapter
@@ -66,7 +66,7 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         monthDepenseEditText.setOnClickListener {
             showDatePicker { selectedDate ->
                 monthDepenseEditText.setText(selectedDate)
-                Toast.makeText(context, "Date sélectionnée : $selectedDate", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.date_selected, selectedDate), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -77,7 +77,7 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
             if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 if (isValidDate(monthDepenseText)) {
-                    val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
+                    val category = if (selectedCategory.isNotEmpty()) selectedCategory else getString(R.string.other)
                     val newExpenseApp= ExpenseApp(
                         userId = userId,
                         expenseId = generateNewId(),
@@ -90,7 +90,7 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
                     lifecycleScope.launch {
                         val newExpense = mapToExpense(newExpenseApp)
                         insertDepenseToDatabase(newExpense)
-                        Toast.makeText(context, "Dépense ajoutée avec succès", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, getString(R.string.success_add_expense), Toast.LENGTH_SHORT).show()
 
                         // Appeler le callback pour informer le fragment parent
                         onDepenseAddedListener?.invoke()
@@ -98,10 +98,10 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
                         dismissAllowingStateLoss()
                     }
                 } else {
-                    Toast.makeText(context, "Date invalide. Utilisez le format AAAA-MM-JJ", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.invalid_date), Toast.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(context, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show()
             }
         }
         return view

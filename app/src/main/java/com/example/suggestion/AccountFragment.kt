@@ -39,7 +39,7 @@ class AccountFragment : Fragment() {
             showDatePicker(requireContext()) { selectedDate ->
                 // Afficher la date sélectionnée dans l'EditText
                 dateOfBirthEditText.setText(selectedDate)
-                Toast.makeText(requireContext(), "Anniversaire sélectionné : $selectedDate", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.account_select_birth_date, selectedDate), Toast.LENGTH_SHORT).show()
             }
         }
 

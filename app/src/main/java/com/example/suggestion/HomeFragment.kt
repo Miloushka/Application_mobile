@@ -56,12 +56,11 @@ class HomeFragment : Fragment() {
             val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view_expenses)
             recyclerView.layoutManager = LinearLayoutManager(context)
 
-            //Initialiser l'adaptateur avec les dépenses
-            val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false)
+            // Initialiser l'adaptateur avec les dépenses
+            val adapter = ExpenseAdapter(expenses, isAnnualView = false, isMonthFragment = false, requireContext())
 
             // Définir le gestionnaire de clic sur les éléments de la liste
             adapter.setOnExpenseClickListener { expense ->
-                // Lorsque l'utilisateur clique sur une dépense, ouvrez le fragment d'édition
                 openEditExpenseFragment(expense)
             }
             recyclerView.adapter = adapter
@@ -104,7 +103,7 @@ class HomeFragment : Fragment() {
 
         // Remplacer le fragment actuel par EditExpenseFragment
         parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, editExpenseFragment)
+            .replace(R.id.fragment_container, editExpenseFragment, "EditExpenseFragment")
             .addToBackStack(null) // Ajouter à la pile de fragments pour permettre de revenir en arrière
             .commit()
     }

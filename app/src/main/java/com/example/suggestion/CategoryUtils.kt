@@ -3,15 +3,17 @@
 
 package com.example.suggestion
 
+import android.content.Context
+
 object CategoryUtils {
-    fun getCategoryAttributes(category: String): Pair<Int, Int> {
+    fun getCategoryAttributes(context: Context, category: String): Pair<Int, Int> {
         val normalizedCategory = category.lowercase().replace("é", "e")?.trim()
         return when (normalizedCategory) {
-            "depense quotidienne" -> Pair(R.color.shoppingColor, R.drawable.ic_shopping)
-            "transport" -> Pair(R.color.transportColor, R.drawable.ic_transport)
-            "loisir" -> Pair(R.color.loisirColor, R.drawable.ic_loisir)
-            "maison" -> Pair(R.color.homeColor, R.drawable.ic_home)
-            "revenu" -> Pair(R.color.incomeColor, R.drawable.ic_income)
+            context.getString(R.string.category_daily_expense).lowercase() -> Pair(R.color.shoppingColor, R.drawable.ic_shopping)
+            context.getString(R.string.category_transport).lowercase() -> Pair(R.color.transportColor, R.drawable.ic_transport)
+            context.getString(R.string.category_leisure).lowercase() -> Pair(R.color.loisirColor, R.drawable.ic_loisir)
+            context.getString(R.string.category_home).lowercase() -> Pair(R.color.homeColor, R.drawable.ic_home)
+            context.getString(R.string.category_income).lowercase() -> Pair(R.color.incomeColor, R.drawable.ic_income)
             else -> Pair(R.color.defaultColor, R.drawable.ic_add)
         }
     }

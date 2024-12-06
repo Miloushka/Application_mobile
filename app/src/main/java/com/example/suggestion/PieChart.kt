@@ -52,7 +52,7 @@ class PieChart @JvmOverloads constructor(
         val centerY = height / 2f
 
         for ((index, category) in data.withIndex()) {
-            val (color, _) = CategoryUtils.getCategoryAttributes(category.getTitle())
+            val (color, _) = CategoryUtils.getCategoryAttributes(context, category.getTitle())
 
             val sweepAngle = (category.totalAmount / total * 360).toFloat()
             paint.color = ContextCompat.getColor(context, color)

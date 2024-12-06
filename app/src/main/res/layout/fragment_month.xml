@@ -50,7 +50,7 @@
         android:layout_below="@id/spinner_year"
         android:gravity="center"
         android:padding="16dp"
-        android:text="Sélectionner une date"
+        android:text="@string/select_date"
         android:textSize="18sp" />
 
     <androidx.cardview.widget.CardView
@@ -65,7 +65,6 @@
         android:id="@+id/total_revenue_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Total Revenu: 0 €"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -74,7 +73,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Reste à dépenser: 0 €"
         android:textSize="18sp"
         android:textStyle="bold" />
 

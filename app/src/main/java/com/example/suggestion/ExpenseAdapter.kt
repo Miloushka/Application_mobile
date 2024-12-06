@@ -1,5 +1,6 @@
 package com.example.suggestion
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,8 @@ import java.util.Locale
 class ExpenseAdapter(
     private val items: List<DisplayableItem>,
     private val isAnnualView: Boolean,
-    private val isMonthFragment: Boolean
+    private val isMonthFragment: Boolean,
+    private val context: Context
 ) : RecyclerView.Adapter<ExpenseAdapter.ExpenseViewHolder>() {
 
     private var onExpenseClickListener: ((ExpenseApp) -> Unit)? = null
@@ -45,7 +47,7 @@ class ExpenseAdapter(
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int) {
         val item = items[position]
-        val (color, icon) = CategoryUtils.getCategoryAttributes(item.getTitle())
+        val (color, icon) = CategoryUtils.getCategoryAttributes(context, item.getTitle())
 
         holder.cardView.setCardBackgroundColor(
             ContextCompat.getColor(holder.itemView.context, color)

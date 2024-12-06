@@ -51,7 +51,7 @@ class AnnualFragment : Fragment() {
         // Initialiser le RecyclerView et l'adaptateur
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_annual)
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isAnnualView = true, isMonthFragment = false)
+        recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isAnnualView = true, isMonthFragment = false, requireContext())
 
         // Ajouter un listener pour le Spinner pour filtrer les dépenses selon l'année
         yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -80,14 +80,11 @@ class AnnualFragment : Fragment() {
                 }
 
                 // Mettre à jour le RecyclerView avec les dépenses filtrées
-                recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
-
-                // Mettre à jour le RecyclerView avec les dépenses filtrées
-                recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
+                recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false, requireContext())
 
                 // Affichage dynamique du message "Aucune dépense trouvée"
                 val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
-                val yearMessage = "Aucune dépense trouvée pour $selectedYear."
+                val yearMessage = getString(R.string.no_expenses_message, selectedYear)
 
                 if (filteredExpenses.isEmpty()) {
                     // Si aucune dépense n'est trouvée, afficher le message

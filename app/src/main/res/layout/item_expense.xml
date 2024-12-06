@@ -50,7 +50,6 @@
             android:paddingTop="8dp"
             android:paddingEnd="8dp"
             android:scrollHorizontally="false"
-            android:text="Description de la dépense qui peut être longue."
             android:textAppearance="?attr/textAppearanceBody1"
             android:textColor="@android:color/white" />
 
@@ -59,7 +58,6 @@
             android:layout_width="59dp"
             android:layout_height="48dp"
             android:gravity="center_vertical|end"
-            android:text="prix"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@android:color/white" />
     </LinearLayout>

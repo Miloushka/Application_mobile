@@ -14,7 +14,7 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="0dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="Ajouter catégorie"
+        android:contentDescription="@string/add_category"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_add" />
 
@@ -32,7 +32,7 @@
         android:id="@+id/no_expenses_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aucune dépense trouvée. Veuillez en ajouter une."
+        android:text="@string/no_expense_found"
         android:textSize="16sp"
         android:visibility="gone"
         android:layout_marginTop="16dp"

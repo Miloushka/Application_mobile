@@ -106,18 +106,18 @@ class MonthFragment : Fragment() {
         val consolidatedExpenses = consolidateExpenses(filteredExpenses)
 
         // Calcul du total des revenus et du reste à dépenser
-        val totalRevenu = consolidatedExpenses.filter { it.category.equals("revenu", ignoreCase = true) }
+        val totalRevenu = consolidatedExpenses.filter { it.category.equals(getString(R.string.category_income), ignoreCase = true) }
             .sumOf { it.price }
 
-        val totalDepenses = consolidatedExpenses.filter { !it.category.equals("revenu", ignoreCase = true) }
+        val totalDepenses = consolidatedExpenses.filter { !it.category.equals(getString(R.string.category_income), ignoreCase = true) }
             .sumOf { it.price }
 
         val remainingBudget = totalRevenu - totalDepenses
 
         // Mettre à jour les TextViews dans la CardView
         val currencyFormat = NumberFormat.getCurrencyInstance(Locale.FRANCE)
-        totalRevenueTextView.text = "Total Revenu : ${currencyFormat.format(totalRevenu)}"
-        remainingBudgetTextView.text = "Reste à dépenser : ${currencyFormat.format(remainingBudget)}"
+        totalRevenueTextView.text = getString(R.string.total_revenue, currencyFormat.format(totalRevenu))
+        remainingBudgetTextView.text = getString(R.string.remaining_budget, currencyFormat.format(remainingBudget))
 
         // Préparer les textes à afficher au centre du PieChart
         val centerTexts = listOf(
@@ -132,8 +132,9 @@ class MonthFragment : Fragment() {
         }
 
         // Initialiser le RecyclerView et l'adaptateur
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isMonthFragment = true, isAnnualView = false)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isMonthFragment = true, isAnnualView = false, context = requireContext())
+
 
         // Créer le message dynamique en fonction de la date
         val monthNames = listOf(

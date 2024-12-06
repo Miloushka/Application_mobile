@@ -1,6 +1,5 @@
 package com.example.suggestion
 
-
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,13 +30,7 @@ class EditExpenseFragment : Fragment() {
 
     private var selectedCategory: String = ""
 
-    private val customList = arrayListOf(
-        CategorieListItems("Dépense quotidienne", R.drawable.ic_shopping),
-        CategorieListItems("Maison", R.drawable.ic_home),
-        CategorieListItems("Loisir", R.drawable.ic_loisir),
-        CategorieListItems("Transport", R.drawable.ic_transport),
-        CategorieListItems("Revenu", R.drawable.ic_income)
-    )
+    private lateinit var customList: ArrayList<CategorieListItems>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +50,14 @@ class EditExpenseFragment : Fragment() {
         submitButton = view.findViewById(R.id.save_button)
         deleteButton = view.findViewById(R.id.delete_button)
 
+        // Initialiser customList avec les chaînes de ressources dans onViewCreated
+        customList = arrayListOf(
+            CategorieListItems(getString(R.string.Category_Dépense_quotidienne), R.drawable.ic_shopping),
+            CategorieListItems(getString(R.string.Category_Maison), R.drawable.ic_home),
+            CategorieListItems(getString(R.string.Category_Loisir), R.drawable.ic_loisir),
+            CategorieListItems(getString(R.string.Category_Transport), R.drawable.ic_transport),
+            CategorieListItems(getString(R.string.Category_Revenu), R.drawable.ic_income)
+        )
 
         // Initialiser le Spinner avec l'adaptateur personnalisé
         val adapter = CustomAdapter(requireContext(), customList)
@@ -69,7 +70,7 @@ class EditExpenseFragment : Fragment() {
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                selectedCategory = "Autre"
+                selectedCategory = getString(R.string.other)
             }
         }
 
@@ -91,10 +92,8 @@ class EditExpenseFragment : Fragment() {
             }
         }
 
-        //TODO("Relier le bouton save a la base de donnée")
         // Sauvegarder les modifications
-        val saveButton: Button = view.findViewById(R.id.save_button)
-        saveButton.setOnClickListener {
+        submitButton.setOnClickListener {
             val updatedCategory = customSpinner.selectedItem.toString()
             val updatedDescription = expenseDetail.text.toString()
             val updatedPrice = priceCost.text.toString().toDouble()
@@ -114,7 +113,7 @@ class EditExpenseFragment : Fragment() {
             parentFragmentManager.popBackStack()
         }
 
-        val deleteButton :Button = view.findViewById(R.id.delete_button)
+        // Suppression de la dépense
         deleteButton.setOnClickListener {
             // Afficher la boîte de dialogue de confirmation
             showDeleteConfirmationDialog()
@@ -123,13 +122,13 @@ class EditExpenseFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog() {
         val dialog = AlertDialog.Builder(requireContext())
-            .setTitle("Confirmation")
-            .setMessage("Voulez-vous vraiment supprimer cette dépense ?")
-            .setPositiveButton("Oui") { dialog, which ->
+            .setTitle(getString(R.string.confirm_delete_title))
+            .setMessage(getString(R.string.confirm_delete_message))
+            .setPositiveButton(getString(R.string.confirm_delete_positive)) { dialog, _ ->
                 // Si l'utilisateur confirme la suppression, on la supprime de la base de données
                 TODO("Supprimer la depense de la base de données")
             }
-            .setNegativeButton("Non") { dialog, which ->
+            .setNegativeButton(getString(R.string.confirm_delete_negative)) { dialog, _ ->
                 // Si l'utilisateur annule, on ferme simplement le dialogue
                 dialog.dismiss()
             }
@@ -137,8 +136,6 @@ class EditExpenseFragment : Fragment() {
 
         dialog.show()
     }
-
-
 
     // Formater la date en dd/MM/yyyy
     private fun formatDate(dateString: String): String {
@@ -167,12 +164,11 @@ class EditExpenseFragment : Fragment() {
         onExpenseUpdatedListener = null
     }
 
-
     private fun deleteExpense() {
         lifecycleScope.launch {
             expense?.let { exp ->
                 // Supprimer la dépense de la base de données
-               TODO("Supprimer de la bdd")
+                TODO("Supprimer de la bdd")
 
                 // Notifier le HomeFragment que la dépense a été supprimée
                 (activity as? MainActivity)?.onExpenseDeleted()
@@ -186,5 +182,4 @@ class EditExpenseFragment : Fragment() {
     interface OnExpenseUpdatedListener {
         fun onExpenseUpdated()
     }
-
 }

@@ -71,7 +71,7 @@ class ConnectionActivity : AppCompatActivity() {
         val password = passwordInput.text.toString()
 
         if (email.trim().isEmpty() || password.trim().isEmpty()) {
-            showError("Vous devez remplir tous les champs !")
+            showError(getString(R.string.fill_all_fields))
         } else {
             // Appeler la méthode de connexion dans le ViewModel
             userViewModel.login(
@@ -80,7 +80,7 @@ class ConnectionActivity : AppCompatActivity() {
                 onSuccess = { user ->
                     Toast.makeText(
                         this,
-                        "Connexion réussie ! Bienvenue, ${user.email}",
+                        getString(R.string.login_success_message, user.email),
                         Toast.LENGTH_SHORT
                     ).show()
                     val intent = Intent(this, MainActivity::class.java)
