@@ -17,24 +17,14 @@
     <!--android:layout_centerInParent="true"-->
 
 
-    <Button
-        android:id="@+id/btn_start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/connect_app_button_acces_application"
-        android:layout_marginTop="35dp"
-        android:layout_below="@id/tv_welcome"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/violet_canva"
-         />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="292dp"
         android:layout_height="137dp"
         android:layout_centerHorizontal="true"
-
-        android:src="@drawable/logo_evisual"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/new_logo"
 
         />
 
@@ -46,7 +36,7 @@
         android:paddingLeft="10dp"
         android:inputType="textEmailAddress"
         android:hint="@string/connect_app_page_mail"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginHorizontal="10dp"
         android:background="@color/white"/>
 
