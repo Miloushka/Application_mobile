@@ -23,6 +23,13 @@ class AccountFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Récupérez l'EditText par son ID
+        val editText: EditText = findViewById(R.id.editText)
+
+        // Définissez la valeur initiale de l'EditText
+        editText.setText("Prérempli")
+
         // Redirection vers ResetPasswordActivity lors du clic sur le texte
         val resetPassword = view.findViewById<TextView>(R.id.resetpassword)
         resetPassword.setOnClickListener {

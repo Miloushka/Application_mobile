@@ -8,7 +8,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.suggestion.data.User
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
+var userConnected: Long = 0
 
 class MainActivity : AppCompatActivity(),
     EditExpenseFragment.OnExpenseUpdatedListener,

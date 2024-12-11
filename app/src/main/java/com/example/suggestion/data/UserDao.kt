@@ -22,5 +22,8 @@ interface UserDao {
     suspend fun getUserByEmail(email: String): User?
 
     @Query("SELECT * FROM users WHERE userId = :userId LIMIT 1")
-    suspend fun getUserById(userId: Int): User?
+    suspend fun getUserById(userId: Long): User?
+
+    @Query("UPDATE users SET password = :newPassword WHERE email = :email")
+    suspend fun changePassword(email: String, newPassword: String)
 }
