@@ -10,11 +10,13 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.InputStreamReader
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.ExpenseViewModel
+import com.example.suggestion.data.ExpenseViewModelFactory
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -27,6 +29,7 @@ class MonthFragment : Fragment() {
     private lateinit var remainingBudgetTextView: TextView
     private lateinit var pieChart: PieChart
     private lateinit var recyclerView: RecyclerView
+    private lateinit var expenseViewModel: ExpenseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +41,13 @@ class MonthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialiser la base de données
+        val database = DataBase.getDatabase(requireContext())
+        val expanseDao = database.expenseDao()
+        // Initialiser le ViewModel
+        val factory = ExpenseViewModelFactory(expanseDao)
+        expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
+
         // Initialisation des vues
         monthSpinner = view.findViewById(R.id.spinner_month)
         yearSpinner = view.findViewById(R.id.spinner_year)
@@ -46,45 +56,35 @@ class MonthFragment : Fragment() {
         pieChart = view.findViewById(R.id.pie_chart)
         recyclerView = view.findViewById(R.id.recycler_view_month)
 
-        // Charger et parser les dépenses depuis le fichier JSON dans assets
-        val expenses = loadExpensesFromAssets()
+        // Charger et parser les dépenses depuis la base de données
+        expenseViewModel.getExpenses(userConnected.userId)
 
         // Initialisation des Spinners pour le mois et l'année
         setupDateSpinners()
 
         // Filtrer les dépenses initialement selon la date par défaut
-        filterExpensesByDate(expenses)
+        filterExpensesByDate(expensesUserConnected)
 
         // Listeners pour les Spinners pour mettre à jour les données en fonction de la sélection
         monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                filterExpensesByDate(expenses)
+                filterExpensesByDate(expensesUserConnected)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
         yearSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                filterExpensesByDate(expenses)
+                filterExpensesByDate(expensesUserConnected)
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
 
-    // Fonction pour charger les dépenses à partir du fichier JSON dans assets
-    private fun loadExpensesFromAssets(): List<ExpenseApp> {
-        val assetManager = context?.assets
-        val inputStream = assetManager?.open("expenses.json") // Ouvrir le fichier JSON dans assets
-        val reader = InputStreamReader(inputStream)
-        val gson = Gson()
 
-        // Utilise Gson pour parser le JSON
-        val expenseListType = object : TypeToken<List<ExpenseApp>>() {}.type
-        return gson.fromJson(reader, expenseListType)
-    }
 
     // Méthode pour filtrer les dépenses par date
-    private fun filterExpensesByDate(expenses: List<ExpenseApp>) {
+    private fun filterExpensesByDate(expenses: List<Expense>) {
         val selectedMonth = monthSpinner.selectedItemPosition + 1
         val selectedYear = yearSpinner.selectedItem as Int
 
@@ -107,10 +107,10 @@ class MonthFragment : Fragment() {
 
         // Calcul du total des revenus et du reste à dépenser
         val totalRevenu = consolidatedExpenses.filter { it.category.equals("revenu", ignoreCase = true) }
-            .sumOf { it.price }
+            .sumOf { it.amount }
 
         val totalDepenses = consolidatedExpenses.filter { !it.category.equals("revenu", ignoreCase = true) }
-            .sumOf { it.price }
+            .sumOf { it.amount }
 
         val remainingBudget = totalRevenu - totalDepenses
 
@@ -126,7 +126,7 @@ class MonthFragment : Fragment() {
 
         // Configuration du PieChart
         pieChart?.let {
-            val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.price) }
+            val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.amount) }
             it.setData(categoryTotals)
             it.setCenterTexts(centerTexts) // Passer les textes au centre du PieChart
         }
@@ -158,27 +158,26 @@ class MonthFragment : Fragment() {
     }
 
     // Méthode pour consolider les dépenses par catégorie
-    private fun consolidateExpenses(expenses: List<ExpenseApp>): List<ExpenseApp> {
+    private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
         val groupedExpenses = expenses.groupBy { it.category }
 
         return groupedExpenses.map { (category, categoryExpenses) ->
-            val totalPrice = categoryExpenses.sumOf { it.price }
+            val totalPrice = categoryExpenses.sumOf { it.amount }
             val concatenatedDescriptions = categoryExpenses.joinToString(separator = "\n") { it.description }
-            val descriptionWithPrices = categoryExpenses.map { "${it.price}€" }
+            val descriptionWithPrices = categoryExpenses.map { "${it.amount}€" }
             val descriptionWithPricesStr = descriptionWithPrices.joinToString(separator = "\n")
 
 
-            TODO("Modifier le user ID")
             // Utilisation d'un ID généré pour chaque dépense consolidée
-            ExpenseApp(
-                userId = 1,
+            Expense(
+                userId = userConnected.userId,
                 expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
                 category = category,
-                price = totalPrice,
+                amount = totalPrice,
                 description = concatenatedDescriptions,
                 date = ""  // La date peut être vide ou ajoutée si nécessaire
             ).apply {
-                this.detailPrices = descriptionWithPricesStr // Ajouter les prix détaillés sous forme de chaîne
+                this.description = descriptionWithPricesStr // Ajouter les prix détaillés sous forme de chaîne
             }
         }
     }

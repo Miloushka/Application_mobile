@@ -2,21 +2,23 @@ package com.example.suggestion.data
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.suggestion.expensesUserConnected
 import kotlinx.coroutines.launch
 
 class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
 
-    fun getExpenses(userId: Int, onResult: (List<Expense>) -> Unit) {
+    lateinit var expense: Expense
+
+    fun getExpenses(userId: Long) {
         viewModelScope.launch {
-            val expenses = expenseDao.getExpensesForUser(userId)
-            onResult(expenses)
+            expensesUserConnected = expenseDao.getExpensesForUser(userId)
         }
     }
 
-    fun addExpense(userId: Int, amount: Double, description: String, date: String, categorie: String, onComplete: () -> Unit) {
+    //userId: Int, amount: Double, description: String, date: String, categorie: String
+    fun addExpense(expense: Expense) {
         viewModelScope.launch {
-            expenseDao.insertExpense(Expense(0, userId, amount, description, date, categorie))
-            onComplete()
+            expenseDao.insertExpense(expense)
         }
     }
 }

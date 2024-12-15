@@ -43,7 +43,7 @@ class ResetPasswordActivity : AppCompatActivity() {
         resetPassword.setOnClickListener {
 
             userViewModel.changePassword(
-                userConnected,
+                userIdConnected,
                 passwordInput.text.toString(),
                 newPasswordInput.text.toString(),
                 onSuccess = { user ->

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 //Contient toutes les methodes pour manipuler la base de donnée
 //écrit par Jean-Guilhem
@@ -26,4 +27,8 @@ interface UserDao {
 
     @Query("UPDATE users SET password = :newPassword WHERE email = :email")
     suspend fun changePassword(email: String, newPassword: String)
+
+    @Update
+    suspend fun updateUser(user: User)
+
 }

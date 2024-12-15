@@ -4,10 +4,10 @@ package com.example.suggestion.data
 // le ViewModel est fait pour encapsuler la logique d'accès à la base de données
 // écrit par Jean-Guilhem
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.suggestion.userConnected
+import com.example.suggestion.userIdConnected
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val userDao: UserDao) : ViewModel() {
@@ -35,7 +35,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
             if (user != null) {
                 if(password == user.password){
                 currentUser = user
-                userConnected = user.userId
+                userConnected = user
+                userIdConnected = user.userId
                 onSuccess(user)
             }} else {
                 onError("Email incorrect.")
@@ -57,6 +58,8 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
             if (password == user.password) {
                 try {
                     userDao.changePassword(user.email, newPassword)
+                    userConnected = userConnected.copy(password = newPassword)
+                    updateUser()
                     println("Mot de passe modifié avec succès.")
                     onSuccess(user)
                 } catch (e: Exception) {
@@ -67,6 +70,19 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
                 println("Mot de passe incorrect.")
                 onError("Mot de passe incorrect.")
             }
+        }
+    }
+
+    fun getUserById(id: Long){
+        viewModelScope.launch {
+            userConnected = userDao.getUserById(id)!!
+        }
+    }
+
+    fun updateUser() {
+        viewModelScope.launch {
+            userDao.updateUser(userConnected)
+            userConnected = userDao.getUserById(userIdConnected)!!
         }
     }
 
