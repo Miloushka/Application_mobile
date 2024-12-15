@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 //Class représentant la table Users de la base de données
-//écrit par Jean-Guilhem
+//écrit par Jean-Guilhem 
 
 @Entity(tableName = "users")
 data class User(
