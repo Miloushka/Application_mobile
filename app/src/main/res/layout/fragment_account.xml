@@ -129,5 +129,15 @@
         android:hint="@string/account_page_dateofbirth_input"
         android:inputType="text" />
 
+    <Button
+        android:id="@+id/validation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateOfBirth"
+        android:layout_marginTop="@dimen/margin_up_input"
+        android:text="@string/account_page_validation"
+        android:textSize="@dimen/size_title_input"
+        android:textStyle="bold"/>
+
 
 </RelativeLayout>

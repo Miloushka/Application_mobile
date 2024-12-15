@@ -21,9 +21,9 @@ import androidx.room.PrimaryKey
 data class Expense(
     @PrimaryKey(autoGenerate = true)
     val expenseId: Int,
-    val userId: Int, // Clé étrangère
+    val userId: Long, // Clé étrangère
     val amount: Double,
-    val description: String,
+    var description: String,
     val date: String,
     val category: String
 )
