@@ -91,7 +91,7 @@ class CreateComptActivity : AppCompatActivity() {
                     email = txtEmail2,
                     onSuccess = { user ->
                         Toast.makeText(this, "Inscription réussie ! Bienvenue, ${user.email}", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, ConnectionActivity::class.java))
+                        startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     },
                     onError = { message ->
