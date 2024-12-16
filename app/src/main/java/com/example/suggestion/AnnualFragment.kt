@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.suggestion.data.CategoryTotal
 import com.example.suggestion.data.DataBase
 import com.example.suggestion.data.Expense
 import com.example.suggestion.data.ExpenseViewModel
@@ -122,17 +123,7 @@ class AnnualFragment : Fragment() {
         }
     }
 
-    // Fonction pour charger les dépenses à partir du fichier JSON dans assets
-    private fun loadExpensesFromAssets(): List<ExpenseApp> {
-        val assetManager = context?.assets
-        val inputStream = assetManager?.open("expenses.json") // Ouvrir le fichier JSON dans assets
-        val reader = InputStreamReader(inputStream)
-        val gson = Gson()
 
-        // Utilisation de Gson pour parser le JSON
-        val expenseListType = object : TypeToken<List<ExpenseApp>>() {}.type
-        return gson.fromJson(reader, expenseListType)
-    }
 
     // Méthode pour regrouper les dépenses par catégorie
     private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {

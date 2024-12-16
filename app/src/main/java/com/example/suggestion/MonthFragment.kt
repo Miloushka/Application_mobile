@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.suggestion.data.CategoryTotal
 import com.example.suggestion.data.DataBase
 import com.example.suggestion.data.Expense
 import com.example.suggestion.data.ExpenseViewModel

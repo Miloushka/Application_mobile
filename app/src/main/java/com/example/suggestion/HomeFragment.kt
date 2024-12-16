@@ -70,6 +70,8 @@ class HomeFragment : Fragment() {
             }
             recyclerView.adapter = adapter
 
+
+
             // Vérifier si la liste des dépenses est vide et afficher le message
             val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
             if (expensesUserConnected.isEmpty()) {
@@ -88,8 +90,6 @@ class HomeFragment : Fragment() {
     private fun openEditExpenseFragment(expense: Expense) {
         val editExpenseFragment = EditExpenseFragment()
 
-        // Passer l'objet ExpenseApp au fragment via le expenseViewModel
-        expenseViewModel.expense = expense
 
         // Remplacer le fragment actuel par EditExpenseFragment
         parentFragmentManager.beginTransaction()
