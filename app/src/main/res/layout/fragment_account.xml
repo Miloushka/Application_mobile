@@ -58,7 +58,7 @@
         android:layout_marginTop="@dimen/margin_up_input"
         android:layout_below="@id/password"
         android:hint="@string/account_page_password"
-        android:inputType="text"/>
+        android:inputType="textPassword"/>
 
     <TextView
         android:id="@+id/resetpassword"
