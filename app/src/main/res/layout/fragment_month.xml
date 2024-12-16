@@ -20,15 +20,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    <Spinner
-        android:id="@+id/spinner_month"
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:layout_weight="1"
-        android:background="?attr/selectableItemBackground"
-        android:minHeight="48dp"
-        android:padding="8dp"
-        android:visibility="visible" />
+        <Spinner
+            android:id="@+id/spinner_month"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@color/bleu_canva"
+            android:radius="32dp"
+            android:visibility="visible" />
 
     <!-- Spinner pour l'année -->
 
@@ -43,17 +42,7 @@
 
 </LinearLayout>
 
-    <TextView
-        android:id="@+id/received_date_text"
-        android:layout_width="match_parent"
-        android:layout_height="69dp"
-        android:layout_below="@id/spinner_year"
-        android:gravity="center"
-        android:padding="16dp"
-        android:text="Sélectionner une date"
-        android:textSize="18sp" />
-
-    <androidx.cardview.widget.CardView
+       <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"

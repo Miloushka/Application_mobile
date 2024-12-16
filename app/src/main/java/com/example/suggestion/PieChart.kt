@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.suggestion.data.CategoryTotal
 import kotlin.math.min
 
 class PieChart @JvmOverloads constructor(

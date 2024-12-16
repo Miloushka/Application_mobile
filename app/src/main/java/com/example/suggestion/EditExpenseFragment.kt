@@ -1,6 +1,6 @@
 package com.example.suggestion
 
-
+import android.app.DatePickerDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,15 +12,18 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.ExpenseViewModel
+import com.example.suggestion.data.ExpenseViewModelFactory
 import kotlinx.coroutines.launch
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 class EditExpenseFragment : Fragment() {
 
-    private var expense: ExpenseApp? = null
     private var onExpenseUpdatedListener: OnExpenseUpdatedListener? = null
     private lateinit var customSpinner: Spinner
     private lateinit var expenseDetail: EditText
@@ -28,6 +31,7 @@ class EditExpenseFragment : Fragment() {
     private lateinit var monthDepenseEditText: EditText
     private lateinit var submitButton: Button
     private lateinit var deleteButton: Button
+    private lateinit var expenseViewModel: ExpenseViewModel
 
     private var selectedCategory: String = ""
 
@@ -49,6 +53,13 @@ class EditExpenseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialiser la base de données
+        val database = DataBase.getDatabase(requireContext())
+        val expanseDao = database.expenseDao()
+        // Initialiser le ViewModel
+        val factory = ExpenseViewModelFactory(expanseDao)
+        expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
+
         // Initialisation des vues
         customSpinner = view.findViewById(R.id.customSpinner)
         expenseDetail = view.findViewById(R.id.description_edit_text)
@@ -56,7 +67,6 @@ class EditExpenseFragment : Fragment() {
         monthDepenseEditText = view.findViewById(R.id.date_edit_text)
         submitButton = view.findViewById(R.id.save_button)
         deleteButton = view.findViewById(R.id.delete_button)
-
 
         // Initialiser le Spinner avec l'adaptateur personnalisé
         val adapter = CustomAdapter(requireContext(), customList)
@@ -73,14 +83,10 @@ class EditExpenseFragment : Fragment() {
             }
         }
 
-        // Récupérer la dépense à modifier
-        expense = arguments?.getParcelable("expense")
-
         // Remplir les champs avec les valeurs de la dépense actuelle
-        expense?.let { exp ->
-            // Remplir les champs de texte
+        expenseCurrent?.let { exp ->
             expenseDetail.setText(exp.description)
-            priceCost.setText(exp.price.toString())
+            priceCost.setText(exp.amount.toString())
             monthDepenseEditText.setText(formatDate(exp.date))
 
             // Sélectionner la catégorie correspondante dans le Spinner
@@ -91,46 +97,70 @@ class EditExpenseFragment : Fragment() {
             }
         }
 
-        //TODO("Relier le bouton save a la base de donnée")
+        // Sélection de la date avec le DatePicker
+        monthDepenseEditText.setOnClickListener {
+            showDatePicker { selectedDate ->
+                monthDepenseEditText.setText(selectedDate)
+            }
+        }
+
         // Sauvegarder les modifications
-        val saveButton: Button = view.findViewById(R.id.save_button)
-        saveButton.setOnClickListener {
-            val updatedCategory = customSpinner.selectedItem.toString()
+        submitButton.setOnClickListener {
             val updatedDescription = expenseDetail.text.toString()
             val updatedPrice = priceCost.text.toString().toDouble()
             val updatedDate = monthDepenseEditText.text.toString()
 
-            expense?.apply {
-                category = updatedCategory
-                description = updatedDescription
-                price = updatedPrice
-                date = updatedDate
-
-                // Informer HomeFragment que la dépense a été mise à jour
-                onExpenseUpdatedListener?.onExpenseUpdated()
+            // Mettre à jour la dépense avec la catégorie sélectionnée
+            val updatedExpense = expenseCurrent?.copy(
+                amount = updatedPrice,
+                date = updatedDate,
+                description = updatedDescription,
+                category = selectedCategory  // Utilisez selectedCategory pour la catégorie
+            )
+            updatedExpense?.let {
+                expenseViewModel.updateExpense(it)
+                expenseCurrent = it
             }
 
             // Fermer le fragment
             parentFragmentManager.popBackStack()
         }
 
-        val deleteButton :Button = view.findViewById(R.id.delete_button)
+        // Supprimer la dépense
         deleteButton.setOnClickListener {
-            // Afficher la boîte de dialogue de confirmation
             showDeleteConfirmationDialog()
         }
+    }
+
+    private fun showDatePicker(onDateSelected: (String) -> Unit) {
+        val calendar = Calendar.getInstance()
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                val selectedDate = formatCalendarDate(year, month, dayOfMonth)
+                onDateSelected(selectedDate)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun formatCalendarDate(year: Int, month: Int, day: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        return dateFormat.format(calendar.time)
     }
 
     private fun showDeleteConfirmationDialog() {
         val dialog = AlertDialog.Builder(requireContext())
             .setTitle("Confirmation")
             .setMessage("Voulez-vous vraiment supprimer cette dépense ?")
-            .setPositiveButton("Oui") { dialog, which ->
-                // Si l'utilisateur confirme la suppression, on la supprime de la base de données
-                TODO("Supprimer la depense de la base de données")
+            .setPositiveButton("Oui") { dialog, _ ->
+                deleteExpense()
             }
-            .setNegativeButton("Non") { dialog, which ->
-                // Si l'utilisateur annule, on ferme simplement le dialogue
+            .setNegativeButton("Non") { dialog, _ ->
                 dialog.dismiss()
             }
             .create()
@@ -138,16 +168,14 @@ class EditExpenseFragment : Fragment() {
         dialog.show()
     }
 
-
-
-    // Formater la date en dd/MM/yyyy
+    // Formater la date de la dépense en dd/MM/yyyy
     private fun formatDate(dateString: String): String {
         val inputFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         return try {
             val date = inputFormat.parse(dateString)
             outputFormat.format(date ?: Date())
-        } catch (e: ParseException) {
+        } catch (e: Exception) {
             ""
         }
     }
@@ -167,12 +195,11 @@ class EditExpenseFragment : Fragment() {
         onExpenseUpdatedListener = null
     }
 
-
     private fun deleteExpense() {
         lifecycleScope.launch {
-            expense?.let { exp ->
+            expenseCurrent?.let { exp ->
                 // Supprimer la dépense de la base de données
-               TODO("Supprimer de la bdd")
+                expenseViewModel.deleteExpense(exp)
 
                 // Notifier le HomeFragment que la dépense a été supprimée
                 (activity as? MainActivity)?.onExpenseDeleted()
@@ -186,5 +213,4 @@ class EditExpenseFragment : Fragment() {
     interface OnExpenseUpdatedListener {
         fun onExpenseUpdated()
     }
-
 }
