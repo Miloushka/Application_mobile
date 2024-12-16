@@ -23,7 +23,6 @@ class HomeFragment : Fragment() {
 
     private lateinit var expenseViewModel: ExpenseViewModel
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,9 +35,10 @@ class HomeFragment : Fragment() {
 
         // Initialiser la base de données
         val database = DataBase.getDatabase(requireContext())
-        val expanseDao = database.expenseDao()
+        val expenseDao = database.expenseDao()
+
         // Initialiser le ViewModel
-        val factory = ExpenseViewModelFactory(expanseDao)
+        val factory = ExpenseViewModelFactory(expenseDao)
         expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
 
         // Initialisation du bouton pour ajouter une dépense
@@ -60,8 +60,8 @@ class HomeFragment : Fragment() {
             val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view_expenses)
             recyclerView.layoutManager = LinearLayoutManager(context)
 
-            //Initialiser l'adaptateur avec les dépenses
-            val adapter = ExpenseAdapter(expensesUserConnected, isAnnualView = false, isMonthFragment = false)
+            // Initialiser l'adaptateur avec les dépenses
+            val adapter = ExpenseAdapter(expensesUserConnected, isMonthFragment = false, isAnnualView = false)  // Utiliser la liste des dépenses récupérées
 
             // Définir le gestionnaire de clic sur les éléments de la liste
             adapter.setOnExpenseClickListener { expense ->
@@ -69,8 +69,6 @@ class HomeFragment : Fragment() {
                 openEditExpenseFragment(expense)
             }
             recyclerView.adapter = adapter
-
-
 
             // Vérifier si la liste des dépenses est vide et afficher le message
             val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
@@ -84,12 +82,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-
     // Fonction pour ouvrir EditExpenseFragment
     private fun openEditExpenseFragment(expense: Expense) {
         val editExpenseFragment = EditExpenseFragment()
 
+        // Passer l'objet Expense au fragment via le expenseViewModel
+        expenseViewModel.expense = expense
 
         // Remplacer le fragment actuel par EditExpenseFragment
         parentFragmentManager.beginTransaction()

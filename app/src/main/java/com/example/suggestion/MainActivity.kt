@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(),
 
         setupUI(findViewById(android.R.id.content))
 
-        // Obtenir une instance de la base de données
+        // Initialisation du ViewModel
         val database = DataBase.getDatabase(this)
         val userDao = database.userDao()
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(),
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
         // récupération des donnée de l'utilisateur connecté
-        userViewModel.getUserById(userConnected.userId)
+        userViewModel.getUserById(userIdConnected)
 
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
@@ -52,13 +52,12 @@ class MainActivity : AppCompatActivity(),
         // Configuration de la navigation par fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_home)
 
-        // Si le signal est true, chargez le AccountFragment
         if (loadAccountFragment) {
-            loadFragment(AccountFragment())  // Charge le fragment Account
+            loadFragment(AccountFragment())  // Charger le fragment Account
             bottomNavigationView.selectedItemId = R.id.bottom_account
         } else {
             if (savedInstanceState == null) {
-                loadFragment(HomeFragment())  // Charge le fragment Home
+                loadFragment(HomeFragment())  // Charger le fragment Home
             }
         }
 

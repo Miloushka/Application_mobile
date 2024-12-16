@@ -164,10 +164,9 @@ class MonthFragment : Fragment() {
 
         return groupedExpenses.map { (category, categoryExpenses) ->
             val totalPrice = categoryExpenses.sumOf { it.amount }
-            val concatenatedDescriptions = categoryExpenses.joinToString(separator = "\n") { it.description }
-            val descriptionWithPrices = categoryExpenses.map { "${it.amount}€" }
-            val descriptionWithPricesStr = descriptionWithPrices.joinToString(separator = "\n")
-
+            val descriptionWithPricesStr = categoryExpenses.joinToString(separator = "\n") {
+                "${it.description} - ${it.amount}€"
+            }
 
             // Utilisation d'un ID généré pour chaque dépense consolidée
             Expense(
@@ -175,7 +174,7 @@ class MonthFragment : Fragment() {
                 expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
                 category = category,
                 amount = totalPrice,
-                description = concatenatedDescriptions,
+                description = descriptionWithPricesStr,
                 date = ""  // La date peut être vide ou ajoutée si nécessaire
             ).apply {
                 this.description = descriptionWithPricesStr // Ajouter les prix détaillés sous forme de chaîne

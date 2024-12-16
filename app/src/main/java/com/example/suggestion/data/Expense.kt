@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey
 interface DisplayableItem {
     fun getTitle(): String
     fun getSubtitle(): String
+    fun getDetails(): String
 }
 
 @Entity(
@@ -40,4 +41,5 @@ data class CategoryTotal(
 ): DisplayableItem {
     override fun getTitle(): String = categoryName
     override fun getSubtitle(): String = "$totalAmount€"
+    override fun getDetails(): String = categoryName
 }
