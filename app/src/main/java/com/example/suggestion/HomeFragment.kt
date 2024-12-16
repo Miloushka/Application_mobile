@@ -47,38 +47,37 @@ class HomeFragment : Fragment() {
             openAddCategorieDialog()
         }
 
-        // Charger les données depuis la base de données
-        loadExpenses()
+        // Observer les dépenses via LiveData
+        expenseViewModel.allExpenses.observe(viewLifecycleOwner, { expenses ->
+            // Mettre à jour le RecyclerView avec la nouvelle liste de dépenses
+            updateRecyclerView(expenses)
+        })
     }
 
-    // Fonction pour charger les dépenses depuis la base de données
-    private fun loadExpenses() {
-        lifecycleScope.launch {
-            expenseViewModel.getExpenses(userConnected.userId)
+    // Mettre à jour le RecyclerView avec les nouvelles dépenses
+    private fun updateRecyclerView(expenses: List<Expense>) {
+        // Configurer RecyclerView
+        val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view_expenses)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
-            // Configurer RecyclerView
-            val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view_expenses)
-            recyclerView.layoutManager = LinearLayoutManager(context)
+        // Initialiser l'adaptateur avec les dépenses
+        val adapter = ExpenseAdapter(expenses, isMonthFragment = false, isAnnualView = false)
 
-            // Initialiser l'adaptateur avec les dépenses
-            val adapter = ExpenseAdapter(expensesUserConnected, isMonthFragment = false, isAnnualView = false)  // Utiliser la liste des dépenses récupérées
+        // Définir le gestionnaire de clic sur les éléments de la liste
+        adapter.setOnExpenseClickListener { expense ->
+            // Lorsque l'utilisateur clique sur une dépense, ouvrez le fragment d'édition
+            openEditExpenseFragment(expense)
+        }
+        recyclerView.adapter = adapter
 
-            // Définir le gestionnaire de clic sur les éléments de la liste
-            adapter.setOnExpenseClickListener { expense ->
-                // Lorsque l'utilisateur clique sur une dépense, ouvrez le fragment d'édition
-                openEditExpenseFragment(expense)
-            }
-            recyclerView.adapter = adapter
-
-            // Vérifier si la liste des dépenses est vide et afficher le message
-            val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
-            if (expensesUserConnected.isEmpty()) {
-                noExpensesMessage.visibility = View.VISIBLE  // Afficher le message si aucune dépense
-                recyclerView.visibility = View.GONE         // Masquer le RecyclerView
-            } else {
-                noExpensesMessage.visibility = View.GONE   // Masquer le message
-                recyclerView.visibility = View.VISIBLE     // Afficher le RecyclerView
-            }
+        // Vérifier si la liste des dépenses est vide et afficher le message
+        val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
+        if (expenses.isEmpty()) {
+            noExpensesMessage.visibility = View.VISIBLE  // Afficher le message si aucune dépense
+            recyclerView.visibility = View.GONE         // Masquer le RecyclerView
+        } else {
+            noExpensesMessage.visibility = View.GONE   // Masquer le message
+            recyclerView.visibility = View.VISIBLE     // Afficher le RecyclerView
         }
     }
 
@@ -103,14 +102,15 @@ class HomeFragment : Fragment() {
         // Définir le callback pour mettre à jour la liste des dépenses après ajout
         addCategorieDialogFragment.onDepenseAddedListener = {
             // Recharger les dépenses après l'ajout
-            loadExpenses()
+            refreshExpenses()
         }
 
         addCategorieDialogFragment.show(childFragmentManager, "AddCategorieDialogFragment")
     }
 
+    // Fonction pour rafraîchir les dépenses après ajout
     fun refreshExpenses() {
-        loadExpenses()  // Appeler la méthode privée pour recharger les dépenses
+        // Pas nécessaire car LiveData observer gère déjà l'actualisation
     }
 
     interface OnExpenseDeletedListener {

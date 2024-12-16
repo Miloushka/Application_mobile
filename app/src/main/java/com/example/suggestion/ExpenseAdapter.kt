@@ -66,7 +66,7 @@ class ExpenseAdapter(
                 holder.price.text = item.amount.toString()
             } else {
                 if (item is Expense) {
-                    holder.title.text = item.category
+                    holder.title.text = item.description
                     holder.price.text = item.amount.toString()
                     holder.date?.text = formatDate(item.date)
                 }

@@ -19,7 +19,7 @@ interface ExpenseDao {
     suspend fun getExpensesForUser(userId: Long): List<Expense>
 
     @Query("SELECT * FROM expenses")
-    suspend fun getAllExpenses(): List<Expense>
+    fun getAllExpenses(): LiveData<List<Expense>>
 
     @Delete
     suspend fun deleteExpense(expense: Expense)
