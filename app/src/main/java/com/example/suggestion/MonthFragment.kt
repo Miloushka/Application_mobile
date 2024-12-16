@@ -2,6 +2,7 @@ package com.example.suggestion
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +21,7 @@ import com.example.suggestion.data.ExpenseViewModel
 import com.example.suggestion.data.ExpenseViewModelFactory
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class MonthFragment : Fragment() {
@@ -31,6 +33,7 @@ class MonthFragment : Fragment() {
     private lateinit var pieChart: PieChart
     private lateinit var recyclerView: RecyclerView
     private lateinit var expenseViewModel: ExpenseViewModel
+    private var expensesUserConnected: List<Expense> = emptyList() // Initialiser avec une liste vide
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,8 +60,12 @@ class MonthFragment : Fragment() {
         pieChart = view.findViewById(R.id.pie_chart)
         recyclerView = view.findViewById(R.id.recycler_view_month)
 
-        // Charger et parser les dépenses depuis la base de données
-        expenseViewModel.getExpenses(userConnected.userId)
+        // Observer les dépenses via LiveData
+        expenseViewModel.allExpenses.observe(viewLifecycleOwner) { expenses ->
+            expensesUserConnected = expenses.filter { it.userId == userConnected.userId }
+            // Appliquer un filtre de mois/année ici si nécessaire
+            filterExpensesByDate(expensesUserConnected)
+        }
 
         // Initialisation des Spinners pour le mois et l'année
         setupDateSpinners()
@@ -82,81 +89,82 @@ class MonthFragment : Fragment() {
         }
     }
 
-
-
     // Méthode pour filtrer les dépenses par date
     private fun filterExpensesByDate(expenses: List<Expense>) {
-        val selectedMonth = monthSpinner.selectedItemPosition + 1
-        val selectedYear = yearSpinner.selectedItem as Int
+        val selectedMonth = monthSpinner.selectedItemPosition + 1 // Mois sélectionné (1-12)
+        val selectedYear = yearSpinner.selectedItem as Int        // Année sélectionnée (ex: 2024)
+
+        Log.d("MonthFragment", "Mois sélectionné: $selectedMonth, Année sélectionnée: $selectedYear")
 
         // Filtrer les dépenses par mois et année sélectionnés
-        val filteredExpenses = expenses.filter {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
+        val filteredExpenses = expenses.filter { expense ->
+            val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.FRANCE) // Format AAAAMMDD
             try {
-                val date = dateFormat.parse(it.date)
-                val calendar = java.util.Calendar.getInstance()
+                // Convertir la date (ex: "20241216") en objet Date
+                val date = dateFormat.parse(expense.date)
+                val calendar = Calendar.getInstance()
                 calendar.time = date
-                calendar.get(java.util.Calendar.MONTH) + 1 == selectedMonth &&
-                        calendar.get(java.util.Calendar.YEAR) == selectedYear
+
+                // Extraire le mois et l'année de la date
+                val expenseMonth = calendar.get(Calendar.MONTH) + 1 // Les mois commencent à 0
+                val expenseYear = calendar.get(Calendar.YEAR)
+
+                // Comparaison avec le mois et l'année sélectionnés
+                expenseMonth == selectedMonth && expenseYear == selectedYear
             } catch (e: Exception) {
-                false // Ignorer les dates mal formatées
+                Log.e("MonthFragment", "Erreur lors du parsing de la date: ${expense.date}", e)
+                false // Ignorer si la date est mal formatée
             }
         }
+
+        Log.d("MonthFragment", "Dépenses filtrées: ${filteredExpenses.size}")
 
         // Consolider les dépenses par catégorie
         val consolidatedExpenses = consolidateExpenses(filteredExpenses)
 
-        // Calcul du total des revenus et du reste à dépenser
-        val totalRevenu = consolidatedExpenses.filter { it.category.equals("revenu", ignoreCase = true) }
+        // Calcul du total des revenus et dépenses
+        val totalRevenu = consolidatedExpenses
+            .filter { it.category.equals("revenu", ignoreCase = true) }
             .sumOf { it.amount }
 
-        val totalDepenses = consolidatedExpenses.filter { !it.category.equals("revenu", ignoreCase = true) }
+        val totalDepenses = consolidatedExpenses
+            .filter { !it.category.equals("revenu", ignoreCase = true) }
             .sumOf { it.amount }
 
         val remainingBudget = totalRevenu - totalDepenses
 
-        // Mettre à jour les TextViews dans la CardView
+        // Mettre à jour les vues TextView
         val currencyFormat = NumberFormat.getCurrencyInstance(Locale.FRANCE)
         totalRevenueTextView.text = "Total Revenu : ${currencyFormat.format(totalRevenu)}"
         remainingBudgetTextView.text = "Reste à dépenser : ${currencyFormat.format(remainingBudget)}"
 
-        // Préparer les textes à afficher au centre du PieChart
-        val centerTexts = listOf(
-            "Dépenses: ${currencyFormat.format(totalDepenses)}" to Color.RED
-        )
-
         // Configuration du PieChart
-        pieChart?.let {
-            val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.amount) }
-            it.setData(categoryTotals)
-            it.setCenterTexts(centerTexts) // Passer les textes au centre du PieChart
-        }
+        val centerTexts = listOf("Dépenses: ${currencyFormat.format(totalDepenses)}" to Color.RED)
+        pieChart?.setData(consolidatedExpenses.map { CategoryTotal(it.category, it.amount) })
+        pieChart?.setCenterTexts(centerTexts)
 
-        // Initialiser le RecyclerView et l'adaptateur
+        // Mise à jour du RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = ExpenseAdapter(consolidatedExpenses, isMonthFragment = true, isAnnualView = false)
 
-        // Créer le message dynamique en fonction de la date
-        val monthNames = listOf(
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        )
-
+        // Afficher ou masquer le message "Aucune dépense trouvée"
         val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
-        val message = "Aucune dépense trouvée pour ${monthNames[selectedMonth - 1]} $selectedYear."
-
-        // Vérifier si la liste des dépenses filtrées est vide et afficher un message
         if (filteredExpenses.isEmpty()) {
-            // Aucune dépense trouvée, afficher le message
-            noExpensesMessage.text = message  // Mettre à jour le texte dynamique
+            val monthNames = listOf(
+                "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+                "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+            )
+            noExpensesMessage.text = "Aucune dépense trouvée pour ${monthNames[selectedMonth - 1]} $selectedYear."
             noExpensesMessage.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            // Des dépenses sont trouvées, masquer le message et afficher le RecyclerView
             noExpensesMessage.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
     }
+
+
+
 
     // Méthode pour consolider les dépenses par catégorie
     private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
@@ -168,17 +176,14 @@ class MonthFragment : Fragment() {
                 "${it.description} - ${it.amount}€"
             }
 
-            // Utilisation d'un ID généré pour chaque dépense consolidée
             Expense(
                 userId = userConnected.userId,
-                expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
+                expenseId = category.hashCode(),
                 category = category,
                 amount = totalPrice,
                 description = descriptionWithPricesStr,
-                date = ""  // La date peut être vide ou ajoutée si nécessaire
-            ).apply {
-                this.description = descriptionWithPricesStr // Ajouter les prix détaillés sous forme de chaîne
-            }
+                date = "" // ou une date spécifique si nécessaire
+            )
         }
     }
 
@@ -188,18 +193,15 @@ class MonthFragment : Fragment() {
         val currentYear = calendar.get(java.util.Calendar.YEAR)
         val currentMonth = calendar.get(java.util.Calendar.MONTH)
 
-        // Liste des mois et années
         val months = listOf(
             "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
             "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
         )
         val years = (1900..currentYear).toList().reversed()
 
-        // Configuration des adaptateurs pour les Spinners
         monthSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, months)
         yearSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, years)
 
-        // Sélection par défaut : mois et année actuels
         monthSpinner.setSelection(currentMonth)
         yearSpinner.setSelection(years.indexOf(currentYear))
     }

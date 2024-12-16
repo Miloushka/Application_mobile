@@ -1,6 +1,7 @@
 package com.example.suggestion
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,6 @@ import com.example.suggestion.data.ExpenseViewModel
 import com.example.suggestion.data.ExpenseViewModelFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.InputStreamReader
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,17 +41,16 @@ class AnnualFragment : Fragment() {
         // Initialiser la base de données
         val database = DataBase.getDatabase(requireContext())
         val expanseDao = database.expenseDao()
+
         // Initialiser le ViewModel
         val factory = ExpenseViewModelFactory(expanseDao)
         expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
-
-
 
         // Initialisation du Spinner pour l'année
         yearSpinner = view.findViewById(R.id.spinner_year)
         setupYearSpinner()
 
-        // Récuperer les dépenses depuis la base de donnée
+        // Récupérer les dépenses depuis la base de données
         expenseViewModel.getExpenses(userConnected.userId)
 
         // Consolider les dépenses par catégorie
@@ -76,13 +74,14 @@ class AnnualFragment : Fragment() {
                 // Filtrer les dépenses en fonction de l'année sélectionnée
                 val selectedYear = yearSpinner.selectedItem as Int
                 val filteredExpenses = expensesUserConnected.filter { expense ->
-                    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
+                    val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.FRANCE) // Format AAAAMMDD
                     try {
-                        val date = dateFormat.parse(expense.date)
+                        val date = dateFormat.parse(expense.date) // Convertir la date au format AAAAMMDD
                         val calendar = Calendar.getInstance()
                         calendar.time = date
-                        calendar.get(Calendar.YEAR) == selectedYear
+                        calendar.get(Calendar.YEAR) == selectedYear // Comparer l'année
                     } catch (e: Exception) {
+                        Log.e("AnnualFragment", "Erreur lors du parsing de la date: ${expense.date}", e)
                         false // Ignorer les dates mal formatées
                     }
                 }
@@ -99,16 +98,13 @@ class AnnualFragment : Fragment() {
                 // Mettre à jour le RecyclerView avec les dépenses filtrées
                 recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
 
-                // Mettre à jour le RecyclerView avec les dépenses filtrées
-                recyclerView.adapter = ExpenseAdapter(filteredConsolidatedExpenses, isAnnualView = true, isMonthFragment = false)
-
                 // Affichage dynamique du message "Aucune dépense trouvée"
                 val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
                 val yearMessage = "Aucune dépense trouvée pour $selectedYear."
 
                 if (filteredExpenses.isEmpty()) {
                     // Si aucune dépense n'est trouvée, afficher le message
-                    noExpensesMessage.text = yearMessage  // Mettre à jour le texte avec l'année sélectionnée
+                    noExpensesMessage.text = yearMessage
                     noExpensesMessage.visibility = View.VISIBLE
                     recyclerView.visibility = View.GONE
                 } else {
@@ -116,14 +112,11 @@ class AnnualFragment : Fragment() {
                     noExpensesMessage.visibility = View.GONE
                     recyclerView.visibility = View.VISIBLE
                 }
-
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
     }
-
-
 
     // Méthode pour regrouper les dépenses par catégorie
     private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
@@ -149,7 +142,6 @@ class AnnualFragment : Fragment() {
             )
         }
     }
-
 
     // Configuration du Spinner pour l'année
     private fun setupYearSpinner() {
