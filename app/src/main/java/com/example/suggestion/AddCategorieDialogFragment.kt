@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.example.suggestion.data.DataBase
 import com.example.suggestion.data.Expense
-import com.example.suggestion.data.ExpenseDao
+import com.example.suggestion.data.ExpenseViewModel
+import com.example.suggestion.data.ExpenseViewModelFactory
+import com.example.suggestion.data.UserViewModel
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,11 +27,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     private lateinit var submitButton: Button
 
     // Room Database instances
-    private lateinit var db: DataBase
-    private lateinit var expenseDao: ExpenseDao
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var expenseViewModel: ExpenseViewModel
 
     private var selectedCategory: String = ""
-    private var userId: Int = 1
+    //private var userId: Int = 1
 
     // Callback pour informer HomeFragment que la dépense a été ajoutée
     var onDepenseAddedListener: (() -> Unit)? = null
@@ -40,11 +42,13 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     ): View? {
         val view = inflater.inflate(R.layout.activity_add_categorie, container, false)
 
-        db = Room.databaseBuilder(
-            requireContext(),
-            DataBase::class.java, "database"
-        ).build()
-        expenseDao = db.expenseDao()
+
+        // Initialiser la base de données
+        val database = DataBase.getDatabase(requireContext())
+        val expanseDao = database.expenseDao()
+        // Initialiser le ViewModel
+        val factory = ExpenseViewModelFactory(expanseDao)
+        expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
 
         customSpinner = view.findViewById(R.id.customSpinner)
         customSpinner.onItemSelectedListener = this
@@ -78,11 +82,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 if (isValidDate(monthDepenseText)) {
                     val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
-                    val newExpenseApp= ExpenseApp(
-                        userId = userId,
+                    val newExpenseApp= Expense(
+                        userId = userConnected.userId,
                         expenseId = generateNewId(),
                         category = category,
-                        price = priceCostText.toDouble(),
+                        amount = priceCostText.toDouble(),
                         description = expenseDetailText,
                         date = monthDepenseText
                     )
@@ -146,18 +150,18 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     }
 
     // Fonction de mappage de ExpenseApp vers Expense
-    private fun mapToExpense(expenseApp: ExpenseApp): Expense {
+    private fun mapToExpense(expenseApp: Expense): Expense {
         return Expense(
             expenseId = expenseApp.expenseId,
-            userId = userId,
-            amount = expenseApp.price,
+            userId = userConnected.userId,
+            amount = expenseApp.amount,
             description = expenseApp.description,
             date = expenseApp.date,
             category = expenseApp.category
         )
     }
 
-    private suspend fun insertDepenseToDatabase(expense: Expense) {
-        expenseDao.insertExpense(expense)
+    private fun insertDepenseToDatabase(expense: Expense) {
+        expenseViewModel.addExpense(expense)
     }
 }
