@@ -173,7 +173,9 @@ class MonthFragment : Fragment() {
         return groupedExpenses.map { (category, categoryExpenses) ->
             val totalPrice = categoryExpenses.sumOf { it.amount }
             val descriptionWithPricesStr = categoryExpenses.joinToString(separator = "\n") {
-                "${it.description} - ${it.amount}€"
+                // Formater chaque élément pour avoir la description à gauche et le prix à droite
+                val formattedString = String.format("%-50s %s€", it.description, it.amount)
+                formattedString
             }
 
             Expense(
