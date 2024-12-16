@@ -9,8 +9,15 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.suggestion.data.CategoryTotal
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.ExpenseViewModel
+import com.example.suggestion.data.ExpenseViewModelFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.InputStreamReader
@@ -18,8 +25,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class AnnualFragment : Fragment() {
-//TODO("relier a la base de donnée")
+
     private lateinit var yearSpinner: Spinner
+    private lateinit var expenseViewModel: ExpenseViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,20 +39,29 @@ class AnnualFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialiser la base de données
+        val database = DataBase.getDatabase(requireContext())
+        val expanseDao = database.expenseDao()
+        // Initialiser le ViewModel
+        val factory = ExpenseViewModelFactory(expanseDao)
+        expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
+
+
+
         // Initialisation du Spinner pour l'année
         yearSpinner = view.findViewById(R.id.spinner_year)
         setupYearSpinner()
 
-        // Charger et parser les dépenses depuis le fichier JSON dans assets
-        val expenses = loadExpensesFromAssets()
+        // Récuperer les dépenses depuis la base de donnée
+        expenseViewModel.getExpenses(userConnected.userId)
 
         // Consolider les dépenses par catégorie
-        val consolidatedExpenses = consolidateExpenses(expenses)
+        val consolidatedExpenses = consolidateExpenses(expensesUserConnected)
 
         // Initialiser le PieChart et afficher les données consolidées
         val pieChart: PieChart = view.findViewById(R.id.pie_chart)
         pieChart?.let {
-            val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.price) }
+            val categoryTotals = consolidatedExpenses.map { CategoryTotal(it.category, it.amount) }
             it.setData(categoryTotals)
         }
 
@@ -58,7 +75,7 @@ class AnnualFragment : Fragment() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 // Filtrer les dépenses en fonction de l'année sélectionnée
                 val selectedYear = yearSpinner.selectedItem as Int
-                val filteredExpenses = expenses.filter { expense ->
+                val filteredExpenses = expensesUserConnected.filter { expense ->
                     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE)
                     try {
                         val date = dateFormat.parse(expense.date)
@@ -75,7 +92,7 @@ class AnnualFragment : Fragment() {
 
                 // Mettre à jour le PieChart avec les données filtrées
                 pieChart?.let {
-                    val categoryTotals = filteredConsolidatedExpenses.map { CategoryTotal(it.category, it.price) }
+                    val categoryTotals = filteredConsolidatedExpenses.map { CategoryTotal(it.category, it.amount) }
                     it.setData(categoryTotals)
                 }
 
@@ -106,41 +123,33 @@ class AnnualFragment : Fragment() {
         }
     }
 
-    // Fonction pour charger les dépenses à partir du fichier JSON dans assets
-    private fun loadExpensesFromAssets(): List<ExpenseApp> {
-        val assetManager = context?.assets
-        val inputStream = assetManager?.open("expenses.json") // Ouvrir le fichier JSON dans assets
-        val reader = InputStreamReader(inputStream)
-        val gson = Gson()
 
-        // Utilisation de Gson pour parser le JSON
-        val expenseListType = object : TypeToken<List<ExpenseApp>>() {}.type
-        return gson.fromJson(reader, expenseListType)
-    }
 
-    // Méthode pour consolider les dépenses par catégorie
-    private fun consolidateExpenses(expenses: List<ExpenseApp>): List<ExpenseApp> {
+    // Méthode pour regrouper les dépenses par catégorie
+    private fun consolidateExpenses(expenses: List<Expense>): List<Expense> {
+        // Grouper les dépenses par catégorie
         val groupedExpenses = expenses.groupBy { it.category }
 
+        // Transformer chaque groupe en une dépense consolidée
         return groupedExpenses.map { (category, categoryExpenses) ->
-            // Calcule la somme des dépenses pour chaque catégorie
-            val totalPrice = categoryExpenses.sumOf { it.price }
+            // Calcule la somme des montants pour la catégorie
+            val totalPrice = categoryExpenses.sumOf { it.amount }
 
-            // Concatène les descriptions des dépenses dans chaque catégorie
+            // Concatène les descriptions des dépenses pour cette catégorie
             val concatenatedDescriptions = categoryExpenses.joinToString(separator = "\n") { it.description }
 
-            TODO("Modifier le user ID")
-            // Crée une nouvelle dépense consolidée pour chaque catégorie
-            ExpenseApp(
-                userId = 1,
-                expenseId = category.hashCode(), // Génère un ID unique basé sur la catégorie
-                category = category,
-                price = totalPrice,
-                description = concatenatedDescriptions,
-                date = ""  // La date peut être vide ou ajoutée si nécessaire
+            // Crée une dépense consolidée pour cette catégorie
+            Expense(
+                userId = userConnected.userId, // Utilisateur connecté
+                expenseId = category.hashCode(), // ID unique basé sur la catégorie
+                category = category, // Catégorie
+                amount = totalPrice, // Total des montants consolidés
+                description = concatenatedDescriptions, // Descriptions concaténées
+                date = "" // Date par défaut ou à ajuster
             )
         }
     }
+
 
     // Configuration du Spinner pour l'année
     private fun setupYearSpinner() {

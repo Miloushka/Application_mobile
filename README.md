@@ -1,3 +1,10 @@
+# Nom utilisateurs 
+
+- **Amélie: Miloushka**
+- **Aude : Audou**
+- **Jean-Guilhem : JG-Lys**
+
+
 # Guide de Configuration de l'Application Mobile
 
 ## Préparations de Base

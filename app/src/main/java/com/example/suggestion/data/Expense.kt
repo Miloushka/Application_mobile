@@ -7,6 +7,12 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
+
+interface DisplayableItem {
+    fun getTitle(): String
+    fun getSubtitle(): String
+}
+
 @Entity(
     tableName = "expenses",
     foreignKeys = [
@@ -21,10 +27,17 @@ import androidx.room.PrimaryKey
 data class Expense(
     @PrimaryKey(autoGenerate = true)
     val expenseId: Int,
-    val userId: Int, // Clé étrangère
+    val userId: Long, // Clé étrangère
     val amount: Double,
-    val description: String,
+    var description: String,
     val date: String,
     val category: String
 )
 
+data class CategoryTotal(
+    val categoryName: String,
+    val totalAmount: Double,
+): DisplayableItem {
+    override fun getTitle(): String = categoryName
+    override fun getSubtitle(): String = "$totalAmount€"
+}

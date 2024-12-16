@@ -8,17 +8,43 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.User
+import com.example.suggestion.data.UserViewModel
+import com.example.suggestion.data.UserViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+
+var userIdConnected: Long = 0
+var userConnected = User(0, "", "", "", "", "")
+var expensesUserConnected = listOf<Expense>()
+var expenseCurrent = Expense(0, 0, 0.0, "", "", "")
 
 class MainActivity : AppCompatActivity(),
     EditExpenseFragment.OnExpenseUpdatedListener,
     HomeFragment.OnExpenseDeletedListener {
 
+    private lateinit var userViewModel: UserViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         setupUI(findViewById(android.R.id.content))
+
+        // Obtenir une instance de la base de données
+        val database = DataBase.getDatabase(this)
+        val userDao = database.userDao()
+
+        // Initialiser le ViewModel avec le UserViewModelFactory
+        val factory = UserViewModelFactory(userDao)
+        userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
+
+        // récupération des donnée de l'utilisateur connecté
+        userViewModel.getUserById(userConnected.userId)
+
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
         val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
@@ -37,6 +63,7 @@ class MainActivity : AppCompatActivity(),
         }
 
         bottomNavigationView.setOnItemSelectedListener { item ->
+            userViewModel.updateUser()
             when (item.itemId) {
                 R.id.bottom_home -> loadFragment(HomeFragment())
                 R.id.bottom_month -> loadFragment(MonthFragment())
@@ -88,6 +115,7 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun loadFragment(fragment: Fragment) {
+        userViewModel.updateUser()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()

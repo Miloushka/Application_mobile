@@ -20,15 +20,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-    <Spinner
-        android:id="@+id/spinner_month"
-        android:layout_width="match_parent"
-        android:layout_height="61dp"
-        android:layout_weight="1"
-        android:background="?attr/selectableItemBackground"
-        android:minHeight="48dp"
-        android:padding="8dp"
-        android:visibility="visible" />
+        <Spinner
+            android:id="@+id/spinner_month"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@color/bleu_canva"
+            android:radius="32dp"
+            android:visibility="visible" />
 
     <!-- Spinner pour l'année -->
 
