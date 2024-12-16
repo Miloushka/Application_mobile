@@ -20,6 +20,7 @@ var userIdConnected: Long = 0
 var userConnected = User(0, "", "", "", "", "")
 var expensesUserConnected = listOf<Expense>()
 
+
 class MainActivity : AppCompatActivity(),
     EditExpenseFragment.OnExpenseUpdatedListener,
     HomeFragment.OnExpenseDeletedListener {
@@ -30,34 +31,28 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         setupUI(findViewById(android.R.id.content))
 
-        // Obtenir une instance de la base de données
+        // Initialisation du ViewModel
         val database = DataBase.getDatabase(this)
         val userDao = database.userDao()
-
-        // Initialiser le ViewModel avec le UserViewModelFactory
         val factory = UserViewModelFactory(userDao)
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
-        // récupération des donnée de l'utilisateur connecté
+        // Récupérer les données de l'utilisateur connecté
         userViewModel.getUserById(userIdConnected)
-
-
-        // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment
-        val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
 
         // Configuration de la navigation par fragments
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_home)
 
-        // Si le signal est true, chargez le AccountFragment
+        // Gestion du signal d'Intent pour charger le fragment approprié
+        val loadAccountFragment = intent.getBooleanExtra("LOAD_ACCOUNT_FRAGMENT", false)
         if (loadAccountFragment) {
-            loadFragment(AccountFragment())  // Charge le fragment Account
+            loadFragment(AccountFragment())  // Charger le fragment Account
             bottomNavigationView.selectedItemId = R.id.bottom_account
         } else {
             if (savedInstanceState == null) {
-                loadFragment(HomeFragment())  // Charge le fragment Home
+                loadFragment(HomeFragment())  // Charger le fragment Home
             }
         }
 
@@ -73,30 +68,35 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
+    // Implémentation de la méthode de l'interface OnExpenseDeletedListener
     override fun onExpenseDeleted() {
+        // Trouver le fragment Home et appeler la méthode refreshExpenses
         val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragment") as? HomeFragment
-        homeFragment?.refreshExpenses()
+        homeFragment?.refreshExpenses()  // Rafraîchir les dépenses
     }
 
     // Implémentation de la méthode de l'interface OnExpenseUpdatedListener
     override fun onExpenseUpdated() {
-        // Cette méthode est appelée lorsque les informations d'une dépense sont mises à jour
-        // Vous pouvez mettre à jour la liste des dépenses dans HomeFragment
+        // Trouver le fragment Home et appeler la méthode refreshExpenses
         val homeFragment = supportFragmentManager.findFragmentByTag("HomeFragment") as? HomeFragment
-        homeFragment?.refreshExpenses() // Appeler la méthode publique refreshExpenses pour recharger les dépenses
+        homeFragment?.refreshExpenses()  // Rafraîchir les dépenses
     }
 
-    // Méthode pour configurer la détection de clic en dehors des EditTexts pour fermer le clavier
+    private fun loadFragment(fragment: Fragment) {
+        // Chargement du fragment
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    // Méthode pour configurer la détection de clics en dehors des EditText pour fermer le clavier
     private fun setupUI(view: View) {
-        // Appliquer un OnTouchListener pour cacher le clavier si on clique en dehors des EditText
         if (view !is EditText) {
             view.setOnTouchListener { _, _ ->
                 hideKeyboard()
                 false
             }
         }
-
-        // Itérer sur tous les enfants si la vue est un groupe
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {
                 val innerView = view.getChildAt(i)
@@ -105,18 +105,10 @@ class MainActivity : AppCompatActivity(),
         }
     }
 
-    // Méthode pour masquer le clavier
     private fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         currentFocus?.let {
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        userViewModel.updateUser()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
     }
 }
