@@ -27,6 +27,7 @@ class CreateComptActivity : AppCompatActivity() {
     private lateinit var password2: EditText
     private lateinit var password3: EditText
     private lateinit var buttonSeconnecter2: Button
+    private lateinit var buttonRetour: Button
     private lateinit var error2: TextView
 
     private lateinit var userViewModel: UserViewModel
@@ -55,6 +56,12 @@ class CreateComptActivity : AppCompatActivity() {
         // Définir l'écouteur sur le bouton
         buttonSeconnecter2.setOnClickListener {
             validateAndCreateUser()
+        }
+        buttonRetour = findViewById<Button>(R.id.retour)
+        buttonRetour.setOnClickListener(){
+            val intent = Intent(this, ConnectionActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

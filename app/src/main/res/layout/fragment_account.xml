@@ -134,10 +134,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/dateOfBirth"
+        android:backgroundTint="@color/violet_canva"
         android:layout_marginTop="@dimen/margin_up_input"
         android:text="@string/account_page_validation"
         android:textSize="@dimen/size_title_input"
         android:textStyle="bold"/>
+
+    <Button
+        android:id="@+id/Disconnect"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/violet_canva"
+        android:layout_alignBottom="@id/validation"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@id/validation"
+        android:text="@string/account_page_disconnect" />
 
 
 </RelativeLayout>

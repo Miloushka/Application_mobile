@@ -33,6 +33,7 @@
     <string name="account_page_dateofbirth">Date de naissance</string>
     <string name="account_page_dateofbirth_input">Saisissez votre date de naissance</string>
     <string name="account_page_validation">Valider les changements</string>
+    <string name="account_page_disconnect">Se deconnecter</string>
 
 
     <!-- Page add_categorie -->
@@ -70,6 +71,7 @@
     <string name="create_compte_page_mot_de_passe">mot de passe</string>
     <string name="create_compte_page_confirmation_mot_de_passe">Confirmation mot de passe</string>
     <string name="create_compte_button_connextion">Se connecter</string>
+    <string name="create_compte_button_retour">Retour</string>
     <string name="create_compte_besoin_aide">Besoin d\'aide ?</string>
 
 
