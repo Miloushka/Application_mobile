@@ -31,7 +31,6 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     private lateinit var expenseViewModel: ExpenseViewModel
 
     private var selectedCategory: String = ""
-    //private var userId: Int = 1
 
     // Callback pour informer HomeFragment que la dépense a été ajoutée
     var onDepenseAddedListener: (() -> Unit)? = null
@@ -41,7 +40,6 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.activity_add_categorie, container, false)
-
 
         // Initialiser la base de données
         val database = DataBase.getDatabase(requireContext())
@@ -82,13 +80,13 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 if (isValidDate(monthDepenseText)) {
                     val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
-                    val newExpenseApp= Expense(
+                    val newExpenseApp = Expense(
                         userId = userConnected.userId,
                         expenseId = generateNewId(),
                         category = category,
                         amount = priceCostText.toDouble(),
                         description = expenseDetailText,
-                        date = monthDepenseText
+                        date = monthDepenseText  // Utilise la date formatée
                     )
 
                     lifecycleScope.launch {
@@ -120,8 +118,8 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         DatePickerDialog(
             requireContext(),
             { _, year, month, dayOfMonth ->
-                val selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                    .format(calendar.apply { set(year, month, dayOfMonth) }.time)
+                // Formater la date en yyyyMMdd
+                val selectedDate = formatCalendarDate(year, month, dayOfMonth)
                 onDateSelected(selectedDate)
             },
             calendar.get(Calendar.YEAR),
@@ -130,9 +128,16 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         ).show()
     }
 
+    private fun formatCalendarDate(year: Int, month: Int, day: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())  // Format approprié pour la base de données
+        return dateFormat.format(calendar.time)
+    }
+
     private fun isValidDate(date: String): Boolean {
         return try {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())  // Date doit être en yyyyMMdd
             sdf.isLenient = false
             sdf.parse(date) != null
         } catch (e: Exception) {
