@@ -21,4 +21,16 @@ class ExpenseViewModel(private val expenseDao: ExpenseDao) : ViewModel() {
             expenseDao.insertExpense(expense)
         }
     }
+
+    fun updateExpense(expense: Expense) {
+        viewModelScope.launch {
+            expenseDao.updateExpense(expense)
+        }
+    }
+
+    fun deleteExpense(expense: Expense) {
+        viewModelScope.launch {
+            expenseDao.deleteExpense(expense)
+        }
+    }
 }

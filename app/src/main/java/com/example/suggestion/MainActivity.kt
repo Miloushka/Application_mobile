@@ -19,6 +19,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 var userIdConnected: Long = 0
 var userConnected = User(0, "", "", "", "", "")
 var expensesUserConnected = listOf<Expense>()
+var expenseCurrent = Expense(0, 0, 0.0, "", "", "")
 
 class MainActivity : AppCompatActivity(),
     EditExpenseFragment.OnExpenseUpdatedListener,
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity(),
         userViewModel = ViewModelProvider(this, factory)[UserViewModel::class.java]
 
         // récupération des donnée de l'utilisateur connecté
-        userViewModel.getUserById(userIdConnected)
+        userViewModel.getUserById(userConnected.userId)
 
 
         // Récupérer le signal de l'Intent pour savoir s'il faut charger le AccountFragment

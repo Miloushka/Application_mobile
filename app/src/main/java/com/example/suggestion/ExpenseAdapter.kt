@@ -76,6 +76,7 @@ class ExpenseAdapter(
         // Ajouter le gestionnaire de clic sur chaque carte de dépense
         holder.cardView.setOnClickListener {
             if (item is Expense) {
+                expenseCurrent = item
                 // Si un gestionnaire de clic est défini, appelle la fonction associé
                 // avec un objet Expense en paramètre
                 onExpenseClickListener?.invoke(item)

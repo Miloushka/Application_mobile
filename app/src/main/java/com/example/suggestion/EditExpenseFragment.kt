@@ -12,7 +12,12 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.suggestion.data.DataBase
+import com.example.suggestion.data.Expense
+import com.example.suggestion.data.ExpenseViewModel
+import com.example.suggestion.data.ExpenseViewModelFactory
 import kotlinx.coroutines.launch
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -20,7 +25,6 @@ import java.util.*
 
 class EditExpenseFragment : Fragment() {
 
-    private var expense: ExpenseApp? = null
     private var onExpenseUpdatedListener: OnExpenseUpdatedListener? = null
     private lateinit var customSpinner: Spinner
     private lateinit var expenseDetail: EditText
@@ -28,6 +32,7 @@ class EditExpenseFragment : Fragment() {
     private lateinit var monthDepenseEditText: EditText
     private lateinit var submitButton: Button
     private lateinit var deleteButton: Button
+    private lateinit var expenseViewModel: ExpenseViewModel
 
     private var selectedCategory: String = ""
 
@@ -49,6 +54,14 @@ class EditExpenseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialiser la base de données
+        val database = DataBase.getDatabase(requireContext())
+        val expanseDao = database.expenseDao()
+        // Initialiser le ViewModel
+        val factory = ExpenseViewModelFactory(expanseDao)
+        expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
+
+
         // Initialisation des vues
         customSpinner = view.findViewById(R.id.customSpinner)
         expenseDetail = view.findViewById(R.id.description_edit_text)
@@ -56,6 +69,7 @@ class EditExpenseFragment : Fragment() {
         monthDepenseEditText = view.findViewById(R.id.date_edit_text)
         submitButton = view.findViewById(R.id.save_button)
         deleteButton = view.findViewById(R.id.delete_button)
+
 
 
         // Initialiser le Spinner avec l'adaptateur personnalisé
@@ -73,14 +87,12 @@ class EditExpenseFragment : Fragment() {
             }
         }
 
-        // Récupérer la dépense à modifier
-        expense = arguments?.getParcelable("expense")
 
         // Remplir les champs avec les valeurs de la dépense actuelle
-        expense?.let { exp ->
+        expenseCurrent?.let { exp ->
             // Remplir les champs de texte
             expenseDetail.setText(exp.description)
-            priceCost.setText(exp.price.toString())
+            priceCost.setText(exp.amount.toString())
             monthDepenseEditText.setText(formatDate(exp.date))
 
             // Sélectionner la catégorie correspondante dans le Spinner
@@ -91,7 +103,7 @@ class EditExpenseFragment : Fragment() {
             }
         }
 
-        //TODO("Relier le bouton save a la base de donnée")
+
         // Sauvegarder les modifications
         val saveButton: Button = view.findViewById(R.id.save_button)
         saveButton.setOnClickListener {
@@ -99,16 +111,9 @@ class EditExpenseFragment : Fragment() {
             val updatedDescription = expenseDetail.text.toString()
             val updatedPrice = priceCost.text.toString().toDouble()
             val updatedDate = monthDepenseEditText.text.toString()
-
-            expense?.apply {
-                category = updatedCategory
-                description = updatedDescription
-                price = updatedPrice
-                date = updatedDate
-
-                // Informer HomeFragment que la dépense a été mise à jour
-                onExpenseUpdatedListener?.onExpenseUpdated()
-            }
+            val updatedExpense = expenseCurrent.copy(amount = updatedPrice, date = updatedDate, description = updatedDescription, category = updatedCategory)
+            expenseViewModel.updateExpense(updatedExpense)
+            expenseCurrent = updatedExpense
 
             // Fermer le fragment
             parentFragmentManager.popBackStack()
@@ -127,7 +132,9 @@ class EditExpenseFragment : Fragment() {
             .setMessage("Voulez-vous vraiment supprimer cette dépense ?")
             .setPositiveButton("Oui") { dialog, which ->
                 // Si l'utilisateur confirme la suppression, on la supprime de la base de données
-                TODO("Supprimer la depense de la base de données")
+                deleteExpense()
+
+
             }
             .setNegativeButton("Non") { dialog, which ->
                 // Si l'utilisateur annule, on ferme simplement le dialogue
@@ -170,9 +177,9 @@ class EditExpenseFragment : Fragment() {
 
     private fun deleteExpense() {
         lifecycleScope.launch {
-            expense?.let { exp ->
+            expenseCurrent?.let { exp ->
                 // Supprimer la dépense de la base de données
-               TODO("Supprimer de la bdd")
+                expenseViewModel.deleteExpense(expenseCurrent)
 
                 // Notifier le HomeFragment que la dépense a été supprimée
                 (activity as? MainActivity)?.onExpenseDeleted()
