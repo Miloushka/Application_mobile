@@ -18,7 +18,7 @@ interface ExpenseDao {
     @Query("SELECT * FROM expenses WHERE userId = :userId")
     suspend fun getExpensesForUser(userId: Long): List<Expense>
 
-    @Query("SELECT * FROM expenses")
+    @Query("SELECT * FROM expenses ORDER BY date DESC")
     fun getAllExpenses(): LiveData<List<Expense>>
 
     @Delete

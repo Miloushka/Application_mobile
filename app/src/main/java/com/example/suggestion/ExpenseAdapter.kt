@@ -56,7 +56,7 @@ class ExpenseAdapter(
         if (isMonthFragment) {
             if (item is Expense) {
                 holder.title.text = item.category
-                holder.price.text = item.amount.toString()
+                holder.price.text = (item.amount.toString() + "€")
                 holder.description?.text = item.description
                 holder.detailPrice?.text = "${item.date}"
             }
@@ -67,7 +67,7 @@ class ExpenseAdapter(
             } else {
                 if (item is Expense) {
                     holder.title.text = item.description
-                    holder.price.text = item.amount.toString()
+                    holder.price.text = (item.amount.toString() + "€")
                     holder.date?.text = formatDate(item.date)
                 }
             }

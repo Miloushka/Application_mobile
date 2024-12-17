@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginTop="50dp"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side">
 
@@ -14,8 +15,7 @@
     <com.example.suggestion.PieChart
         android:id="@+id/pie_chart"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="60dp" />
+        android:layout_height="300dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_annual"

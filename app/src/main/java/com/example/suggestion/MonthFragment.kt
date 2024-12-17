@@ -172,10 +172,14 @@ class MonthFragment : Fragment() {
 
         return groupedExpenses.map { (category, categoryExpenses) ->
             val totalPrice = categoryExpenses.sumOf { it.amount }
-            val descriptionWithPricesStr = categoryExpenses.joinToString(separator = "\n") {
-                // Formater chaque élément pour avoir la description à gauche et le prix à droite
-                val formattedString = String.format("%-50s %s€", it.description, it.amount)
-                formattedString
+            // Pour afficher uniquement les descriptions
+            val descriptionStr = categoryExpenses.joinToString(separator = "\n") {
+                it.description // Retourne seulement la description
+            }
+
+            // Pour afficher uniquement les prix
+            val pricesStr = categoryExpenses.joinToString(separator = "\n") {
+                "${it.amount}€" // Retourne seulement le prix avec l'unité €
             }
 
             Expense(
@@ -183,8 +187,8 @@ class MonthFragment : Fragment() {
                 expenseId = category.hashCode(),
                 category = category,
                 amount = totalPrice,
-                description = descriptionWithPricesStr,
-                date = "" // ou une date spécifique si nécessaire
+                description = descriptionStr,
+                date = pricesStr // ou une date spécifique si nécessaire
             )
         }
     }
