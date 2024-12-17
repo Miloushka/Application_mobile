@@ -27,6 +27,7 @@ class CreateComptActivity : AppCompatActivity() {
     private lateinit var password2: EditText
     private lateinit var password3: EditText
     private lateinit var buttonSeconnecter2: Button
+    private lateinit var buttonRetour: Button
     private lateinit var error2: TextView
 
     private lateinit var userViewModel: UserViewModel
@@ -56,6 +57,12 @@ class CreateComptActivity : AppCompatActivity() {
         buttonSeconnecter2.setOnClickListener {
             validateAndCreateUser()
         }
+        buttonRetour = findViewById<Button>(R.id.retour)
+        buttonRetour.setOnClickListener(){
+            val intent = Intent(this, ConnectionActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun validateAndCreateUser() {
@@ -84,7 +91,7 @@ class CreateComptActivity : AppCompatActivity() {
                     email = txtEmail2,
                     onSuccess = { user ->
                         Toast.makeText(this, "Inscription réussie ! Bienvenue, ${user.email}", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, ConnectionActivity::class.java))
+                        startActivity(Intent(this, MainActivity::class.java))
                         finish()
                     },
                     onError = { message ->
