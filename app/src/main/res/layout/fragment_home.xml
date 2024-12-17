@@ -32,12 +32,11 @@
         android:id="@+id/no_expenses_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Aucune dépense trouvée. Veuillez en ajouter une."
+        android:layout_centerInParent="true"
+        android:text="Aucune dépense trouvée, veuillez cliquer sur le bouton + en haut à droite pour en ajouter une."
         android:textSize="16sp"
-        android:visibility="gone"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
         android:textColor="@android:color/darker_gray"
-        android:layout_below="@id/recycler_view_expenses" />
+        android:gravity="center"
+        android:visibility="gone" />
 
 </RelativeLayout>

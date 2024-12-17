@@ -41,17 +41,36 @@ class HomeFragment : Fragment() {
         val factory = ExpenseViewModelFactory(expenseDao)
         expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
 
-        // Initialisation du bouton pour ajouter une dépense
+        // Initialisation des vues
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
+        val noExpensesMessage: TextView = view.findViewById(R.id.no_expenses_message)
         val addButton: ImageButton = view.findViewById(R.id.button_open_add_categorie)
+
+        // Configurer RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        val adapter = ExpenseAdapter(emptyList(), isMonthFragment = false, isAnnualView = false)
+        recyclerView.adapter = adapter
+        // Initialisation du bouton pour ajouter une dépense
         addButton.setOnClickListener {
             openAddCategorieDialog()
         }
 
         // Observer les dépenses via LiveData
-        expenseViewModel.allExpenses.observe(viewLifecycleOwner, { expenses ->
-            // Mettre à jour le RecyclerView avec la nouvelle liste de dépenses
-            updateRecyclerView(expenses)
-        })
+        expenseViewModel.allExpenses.observe(viewLifecycleOwner) { expenses ->
+            val filteredExpenses = expenses.filter { it.userId == userConnected.userId }
+
+            // Gérer l'affichage des vues
+            if (filteredExpenses.isEmpty()) {
+                // Aucune dépense trouvée
+                noExpensesMessage.text = "Aucune dépense trouvée, veillez cliquer sur le bouton + en haut a droite de l'écran pour en ajouter une"
+                noExpensesMessage.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            } else {
+                // Afficher les dépenses et masquer le message
+                noExpensesMessage.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
+            }
+        }
     }
 
     // Mettre à jour le RecyclerView avec les nouvelles dépenses

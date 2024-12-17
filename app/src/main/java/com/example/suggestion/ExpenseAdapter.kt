@@ -97,5 +97,7 @@ class ExpenseAdapter(
             rawDate // Retourner la date brute en cas d'erreur
         }
     }
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int {
+        return items.size // Retourner le nombre d'éléments dans la liste
+    }
 }
