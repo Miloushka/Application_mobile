@@ -63,7 +63,7 @@ class ExpenseAdapter(
         } else {
             if (isAnnualView) {
                 holder.title.text = item.category
-                holder.price.text = item.amount.toString()
+                holder.price.text = (item.amount.toString() + "€")
             } else {
                 if (item is Expense) {
                     holder.title.text = item.description

@@ -29,17 +29,27 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
     }
 
     // fonction permmettant de se connecter
-    fun login(email: String, password: String, onSuccess: (User) -> Unit, onError: (String) -> Unit) {
+    fun login(
+        email: String,
+        password: String,
+        onSuccess: (User) -> Unit,
+        onError: (String) -> Unit
+    ) {
         viewModelScope.launch {
             val user = userDao.getUserByEmail(email)
-            if (user != null) {
-                if(password == user.password){
+
+            if (user == null) {
+                // Aucun utilisateur avec cet email
+                onError("Aucun compte n'est associé à cette adresse mail.")
+            } else if (password != user.password) {
+                // Le mot de passe est incorrect
+                onError("Mot de passe incorrect.")
+            } else {
+                // Succès : connexion validée
                 currentUser = user
                 userConnected = user
                 userIdConnected = user.userId
                 onSuccess(user)
-            }} else {
-                onError("Email incorrect.")
             }
         }
     }
@@ -85,5 +95,7 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
             userConnected = userDao.getUserById(userIdConnected)!!
         }
     }
+
+
 
 }
