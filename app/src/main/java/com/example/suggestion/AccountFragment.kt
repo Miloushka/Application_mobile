@@ -24,6 +24,7 @@ class AccountFragment : Fragment() {
     lateinit var inputName: EditText
     lateinit var inputSurname: EditText
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -72,6 +73,12 @@ class AccountFragment : Fragment() {
             var firstname= inputSurname.text.toString()
             var dateOfBirth = dateOfBirthEditText.text.toString()
             userConnected = userConnected.copy(email=email, lastName = name, firstName = firstname, dateOfBirth = dateOfBirth)
+        }
+
+        val disconnect = view.findViewById<Button>(R.id.Disconnect)
+        disconnect.setOnClickListener {
+            val intent = Intent(requireActivity(), ConnectionActivity::class.java)
+            startActivity(intent)
         }
 
 
