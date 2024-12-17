@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rootLayout"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -7,6 +7,7 @@
     android:layout_marginRight="@dimen/default_margin_side"
     android:layout_marginTop="@dimen/default_margin_side"
     android:focusable="true"
+    android:orientation="vertical"
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -131,7 +132,7 @@
 
     <Button
         android:id="@+id/validation"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dateOfBirth"
         android:backgroundTint="@color/violet_canva"
@@ -142,7 +143,7 @@
 
     <Button
         android:id="@+id/Disconnect"
-        android:layout_width="144dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/violet_canva"
         android:layout_alignBottom="@id/validation"
@@ -152,4 +153,4 @@
         android:text="@string/account_page_disconnect" />
 
 
-</RelativeLayout>
+</LinearLayout>

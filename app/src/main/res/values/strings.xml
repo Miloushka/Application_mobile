@@ -74,5 +74,6 @@
     <string name="create_compte_button_retour">Retour</string>
     <string name="create_compte_besoin_aide">Besoin d\'aide ?</string>
 
+    <string name="price_with_symbol">%1$d €</string>
 
 </resources>

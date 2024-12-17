@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
+    android:layout_marginTop="50dp"
     android:layout_marginLeft="@dimen/default_margin_side"
     android:layout_marginRight="@dimen/default_margin_side">
 
@@ -25,7 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:background="@color/bleu_canva"
             android:radius="32dp"
             android:visibility="visible" />
 
@@ -36,7 +36,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:background="?attr/selectableItemBackground"
         android:minHeight="48dp"
         android:padding="8dp" />
 
@@ -65,7 +64,8 @@
         android:layout_marginTop="8dp"
         android:text="Reste à dépenser: 0 €"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingBottom="@dimen/margin_down_input"/>
 
     <com.example.suggestion.PieChart
         android:id="@+id/pie_chart"
