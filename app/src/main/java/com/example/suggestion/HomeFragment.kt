@@ -22,6 +22,7 @@ import com.example.suggestion.data.UserViewModelFactory
 class HomeFragment : Fragment() {
 
     private lateinit var expenseViewModel: ExpenseViewModel
+    private var expensesUserConnected: List<Expense> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +44,6 @@ class HomeFragment : Fragment() {
 
         // Initialisation des vues
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view_expenses)
-        val noExpensesMessage: TextView = view.findViewById(R.id.no_expenses_message)
         val addButton: ImageButton = view.findViewById(R.id.button_open_add_categorie)
 
         // Configurer RecyclerView
@@ -57,19 +57,8 @@ class HomeFragment : Fragment() {
 
         // Observer les dépenses via LiveData
         expenseViewModel.allExpenses.observe(viewLifecycleOwner) { expenses ->
-            val filteredExpenses = expenses.filter { it.userId == userConnected.userId }
-
-            // Gérer l'affichage des vues
-            if (filteredExpenses.isEmpty()) {
-                // Aucune dépense trouvée
-                noExpensesMessage.text = "Aucune dépense trouvée, veillez cliquer sur le bouton + en haut a droite de l'écran pour en ajouter une"
-                noExpensesMessage.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-            } else {
-                // Afficher les dépenses et masquer le message
-                noExpensesMessage.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
-            }
+            expensesUserConnected = expenses.filter { it.userId == userConnected.userId }
+            updateRecyclerView(expensesUserConnected)
         }
     }
 
@@ -89,15 +78,6 @@ class HomeFragment : Fragment() {
         }
         recyclerView.adapter = adapter
 
-        // Vérifier si la liste des dépenses est vide et afficher le message
-        val noExpensesMessage: TextView = requireView().findViewById(R.id.no_expenses_message)
-        if (expenses.isEmpty()) {
-            noExpensesMessage.visibility = View.VISIBLE  // Afficher le message si aucune dépense
-            recyclerView.visibility = View.GONE         // Masquer le RecyclerView
-        } else {
-            noExpensesMessage.visibility = View.GONE   // Masquer le message
-            recyclerView.visibility = View.VISIBLE     // Afficher le RecyclerView
-        }
     }
 
     // Fonction pour ouvrir EditExpenseFragment
