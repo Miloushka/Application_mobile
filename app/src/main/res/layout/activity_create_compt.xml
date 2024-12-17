@@ -85,16 +85,22 @@
         android:layout_marginRight="10dp"
         android:text="@string/create_compte_button_retour" />
 
-    <TextView
-        android:id="@+id/besoin_d_aide"
-        android:textStyle="bold"
-        android:text="@string/create_compte_besoin_aide"
-        android:layout_below="@id/seConnecter2"
-        android:layout_marginTop="25dp"
-        android:layout_centerHorizontal="true"
+
+    <Button
+        android:id="@+id/button_help2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/create_compte_besoin_aide"
+        android:onClick="openHelpLink"
+        android:layout_below="@id/seConnecter2"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/violet_canva"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
         />
+
+
+
     <TextView
         android:id="@+id/error2"
         android:layout_below="@id/Motdepasse3"

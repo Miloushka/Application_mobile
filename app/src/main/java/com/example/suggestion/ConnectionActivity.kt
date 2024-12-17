@@ -6,6 +6,7 @@
 package com.example.suggestion
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -97,5 +98,11 @@ class ConnectionActivity : AppCompatActivity() {
         errorTextView.text = message
         errorTextView.visibility = View.VISIBLE
     }
+    fun openHelpLink(view: View) {
+        val url = "https://www.beapp.fr/blog/page-login-application-mobile"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
 }
 
