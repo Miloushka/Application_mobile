@@ -1,6 +1,7 @@
 package com.example.suggestion
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ import com.example.suggestion.data.ExpenseViewModel
 import com.example.suggestion.data.ExpenseViewModelFactory
 import com.example.suggestion.data.UserViewModel
 import com.example.suggestion.data.UserViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class HomeFragment : Fragment() {
 
@@ -51,7 +54,13 @@ class HomeFragment : Fragment() {
         expenseViewModel.allExpenses.observe(viewLifecycleOwner, { expenses ->
             // Mettre à jour le RecyclerView avec la nouvelle liste de dépenses
             updateRecyclerView(expenses)
-        })
+        })   // Observer les dépenses via LiveData
+        expenseViewModel.allExpenses.observe(viewLifecycleOwner) { expenses ->
+            expensesUserConnected = expenses.filter { it.userId == userConnected.userId }
+            // Appliquer un filtre de mois/année ici si nécessaire
+            filterExpensesByDate(expensesUserConnected)
+        }
+
     }
 
     // Mettre à jour le RecyclerView avec les nouvelles dépenses
@@ -116,4 +125,22 @@ class HomeFragment : Fragment() {
     interface OnExpenseDeletedListener {
         fun onExpenseDeleted()
     }
+
+    // Méthode pour filtrer et trier les dépenses par date décroissante
+    private fun filterExpensesByDate(expenses: List<Expense>) {
+        // Trier les dépenses par date décroissante (du plus récent au plus ancien)
+        val sortedExpenses = expenses.sortedByDescending { expense ->
+            val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.FRANCE) // Format AAAAMMDD
+            try {
+                dateFormat.parse(expense.date) // Parse la date pour pouvoir la trier
+            } catch (e: Exception) {
+                Log.e("HomeFragment", "Erreur lors du parsing de la date pour le tri: ${expense.date}", e)
+                null // Si la date est mal formatée, elle sera ignorée
+            }
+        }
+
+        // Mettre à jour le RecyclerView avec les dépenses triées
+        updateRecyclerView(sortedExpenses)
+    }
+
 }

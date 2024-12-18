@@ -43,9 +43,11 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
         // Initialiser la base de données
         val database = DataBase.getDatabase(requireContext())
-        val expanseDao = database.expenseDao()
-        // Initialiser le ViewModel
-        val factory = ExpenseViewModelFactory(expanseDao)
+        val expenseDao = database.expenseDao()
+
+        // Initialiser les ViewModels
+        userViewModel = ViewModelProvider(requireActivity()).get(UserViewModel::class.java)
+        val factory = ExpenseViewModelFactory(expenseDao)
         expenseViewModel = ViewModelProvider(this, factory)[ExpenseViewModel::class.java]
 
         customSpinner = view.findViewById(R.id.customSpinner)
@@ -79,25 +81,33 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
             if (expenseDetailText.isNotEmpty() && priceCostText.isNotEmpty() && monthDepenseText.isNotEmpty()) {
                 if (isValidDate(monthDepenseText)) {
-                    val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
-                    val newExpenseApp = Expense(
-                        userId = userConnected.userId,
-                        expenseId = generateNewId(),
-                        category = category,
-                        amount = priceCostText.toDouble(),
-                        description = expenseDetailText,
-                        date = monthDepenseText  // Utilise la date formatée
-                    )
+                    // Récupérer l'utilisateur connecté
+                    val userConnected = userViewModel.getUserConnected()  // Récupérer l'utilisateur connecté
 
-                    lifecycleScope.launch {
-                        val newExpense = mapToExpense(newExpenseApp)
-                        insertDepenseToDatabase(newExpense)
-                        Toast.makeText(context, "Dépense ajoutée avec succès", Toast.LENGTH_SHORT).show()
+                    // Vérifier si un utilisateur est connecté
+                    if (userConnected != null) {
+                        val category = if (selectedCategory.isNotEmpty()) selectedCategory else "Autre"
+                        val newExpenseApp = Expense(
+                            userId = userConnected.userId, // Utiliser l'ID de l'utilisateur connecté
+                            expenseId = generateNewId(),
+                            category = category,
+                            amount = priceCostText.toDouble(),
+                            description = expenseDetailText,
+                            date = monthDepenseText  // Utilise la date formatée
+                        )
 
-                        // Appeler le callback pour informer le fragment parent
-                        onDepenseAddedListener?.invoke()
+                        lifecycleScope.launch {
+                            val newExpense = mapToExpense(newExpenseApp)
+                            insertDepenseToDatabase(newExpense)
+                            Toast.makeText(context, "Dépense ajoutée avec succès", Toast.LENGTH_SHORT).show()
 
-                        dismissAllowingStateLoss()
+                            // Appeler le callback pour informer le fragment parent
+                            onDepenseAddedListener?.invoke()
+
+                            dismissAllowingStateLoss()
+                        }
+                    } else {
+                        Toast.makeText(context, "Utilisateur non connecté", Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(context, "Date invalide. Utilisez le format AAAA-MM-JJ", Toast.LENGTH_SHORT).show()
@@ -106,6 +116,7 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
                 Toast.makeText(context, "Veuillez remplir tous les champs", Toast.LENGTH_SHORT).show()
             }
         }
+
         return view
     }
 
@@ -158,7 +169,7 @@ class AddCategorieDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     private fun mapToExpense(expenseApp: Expense): Expense {
         return Expense(
             expenseId = expenseApp.expenseId,
-            userId = userConnected.userId,
+            userId = expenseApp.userId,
             amount = expenseApp.amount,
             description = expenseApp.description,
             date = expenseApp.date,

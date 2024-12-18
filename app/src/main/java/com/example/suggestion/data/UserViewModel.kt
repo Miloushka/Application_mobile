@@ -85,16 +85,41 @@ class UserViewModel(private val userDao: UserDao) : ViewModel() {
 
     fun getUserById(id: Long){
         viewModelScope.launch {
-            userConnected = userDao.getUserById(id)!!
+            try {
+                val user = userDao.getUserById(id)  // Fonction suspendue appelée dans une coroutine
+                if (user != null) {
+                    userConnected = user
+                } else {
+                    println("Utilisateur avec ID $id non trouvé.")
+                }
+            } catch (e: Exception) {
+                println("Erreur lors de la récupération de l'utilisateur: ${e.message}")
+            }
         }
+    }
+
+    fun getUserConnected(): User? {
+        return userConnected
     }
 
     fun updateUser() {
         viewModelScope.launch {
-            userDao.updateUser(userConnected)
-            userConnected = userDao.getUserById(userIdConnected)!!
+            if (userConnected != null) {
+                userDao.updateUser(userConnected!!)
+                val updatedUser = userDao.getUserById(userIdConnected)  // Cela peut retourner un User? (nullable)
+
+                if (updatedUser != null) {
+                    userConnected = updatedUser  // Affecter un User non nul
+                } else {
+                    println("Utilisateur non trouvé avec l'ID $userIdConnected")
+                    // Vous pouvez choisir de gérer cette situation ici
+                }
+            } else {
+                println("userConnected est null, impossible de mettre à jour l'utilisateur.")
+            }
         }
     }
+
 
 
 

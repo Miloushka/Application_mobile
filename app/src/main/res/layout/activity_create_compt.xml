@@ -107,4 +107,16 @@
         android:visibility="gone"
         />
 
+    <Button
+        android:id="@+id/button_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_compte_besoin_aide"
+        android:onClick="openHelpLink"
+        android:layout_below="@id/seConnecter2"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/violet_canva"
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        />
 </RelativeLayout>
