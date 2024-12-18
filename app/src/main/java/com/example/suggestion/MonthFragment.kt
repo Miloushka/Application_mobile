@@ -124,11 +124,11 @@ class MonthFragment : Fragment() {
 
         // Calcul du total des revenus et dépenses
         val totalRevenu = consolidatedExpenses
-            .filter { it.category.equals("revenu", ignoreCase = true) }
+            .filter { !!it.category.equals("Revenu", ignoreCase = true) }
             .sumOf { it.amount }
 
         val totalDepenses = consolidatedExpenses
-            .filter { !it.category.equals("revenu", ignoreCase = true) }
+            .filter { !it.category.equals("Revenu", ignoreCase = true) }
             .sumOf { it.amount }
 
         val remainingBudget = totalRevenu - totalDepenses

@@ -64,6 +64,8 @@ class HomeFragment : Fragment() {
 
     // Mettre à jour le RecyclerView avec les nouvelles dépenses
     private fun updateRecyclerView(expenses: List<Expense>) {
+        expenseViewModel.getExpenses(userConnected.userId)
+
         // Configurer RecyclerView
         val recyclerView: RecyclerView = requireView().findViewById(R.id.recycler_view_expenses)
         recyclerView.layoutManager = LinearLayoutManager(context)
